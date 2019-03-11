@@ -1,0 +1,25 @@
+.screen-reader-text {
+  clip: rect(1px, 1px, 1px, 1px);
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+
+.screen-reader-text:hover,
+.screen-reader-text:active,
+.screen-reader-text:focus {
+  background-color: $color-black;
+  clip: auto !important;
+  color: $color-white;
+  display: block;
+  font-size: 1.4rem;
+  height: auto;
+  left: 0.5rem;
+  line-height: normal;
+  padding: 1.5rem 2.3rem 1.4rem;
+  text-decoration: none;
+  top: 0.5rem;
+  width: auto;
+  z-index: 1000000;
+}

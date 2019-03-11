@@ -1,0 +1,985 @@
+---
+layout: post
+title: "Jekyll Notes"
+categories: Jekyll
+featImg: jekyll.jpg
+itemType: image
+pageType: blog
+---
+<div class="post-main">
+<h3>What is Jekyll?</h3>
+<p><a href="https://jekyllrb.com/" target="_blank">Jekyll</a> gives us the ability to create a static website by using dynamic content such as templates, partials and liquid code. Jekyll sites can be hosted on Github servers for free. A benefit of this type of website is that it doesn't need a database which can make the site faster and more secure. If you want to read more about Jekyll take a look at <a href="https://jekyllrb.com/docs/" target="_blank">this documentation from the Jekyll website</a>.</p>
+
+<h3>Project set up</h3>
+<p>This post describes how I used Jekyll to build my portfolio website. I don't give any guidance on Jekyll installation so if you want to learn how to install it take a look at the following article: <a href="https://help.github.com/en/articles/setting-up-your-github-pages-site-locally-with-jekyll" target="_blank">Set up a Github Pages site locally with Jekyll</a>.</p>
+
+<h3>Manage the project folder</h3>
+<ol>
+  <li>Delete the <em>about.md</em> file.</li>
+  <li>Rename the <em>index.md</em> file to <em>index.html</em></li>
+  <li>Create the following folders inside the root directory of the project:
+    <ul>      
+      <li><em>_includes</em></li>
+      <li><em>_layouts</em></li>
+      <li><em>_projects</em></li>
+      <li><em>_sass</em></li>
+      <li><em>assets</em></li>  
+    </ul>
+  </li>
+  <li>Create the following files inside the root directory of the project:
+    <ul>      
+      <li><em>404.html</em></li>
+      <li><em>about.html</em></li>
+      <li><em>blog.html</em></li>
+      <li><em>contact.html</em></li>
+      <li><em>portfolio.html</em></li>
+      <li><em>thanks.html</em></li>
+    </ul>
+  </li>
+  <li>Create the following files inside the <em>_includes</em> folder:
+    <ul>
+      <li><em>head.html</em></li>
+      <li><em>header.html</em></li>
+      <li><em>js-link.html</em></li>
+      <li><em>nav.html</em></li>
+      <li><em>prevnext.html</em></li>
+    </ul>
+  </li>
+  <li>Create the following files inside the <em>_layouts</em> folder:
+    <ul>
+      <li><em>default.html</em></li>
+      <li><em>post.html</em></li>
+    </ul>
+  </li>
+  <li>Create the following folders inside the <em>assets</em> folder:
+    <ul>
+      <li><em>css</em></li>
+      <li><em>img</em></li>
+      <li><em>js</em></li>
+    </ul>
+  </li>
+  <li>Create a new file called <em>styles.css</em> inside the <em>assets/css</em></li>
+  <li>Create the following folders inside the <em>assets/img</em> folder:
+    <ul>
+      <li><em>blog</em> - this will contain images attached to our blog posts</li>
+      <li><em>project</em> - this will contain images attached to our project collection posts</li>
+    </ul>
+    <li>Im using a syntax highligher called <a href="https://prismjs.com/index.html">Prism.js</a> which consists of a single css file and a single javascript file. These files are placed in the <em>assets/css</em> and the <em>assets/js</em> folders respectively</li>
+</ol>
+
+
+<h3>Manage files inside the root folder</h3>
+
+<ol>
+<li>Open <em>Gemfile</em> and delete <code class="language-json">gem "minima", "~> 2.0"</code></li>
+<li>Open the <em>config.yml</em> file. Delete the existing content and add the following: 
+<pre>
+<code class="language-yaml">
+  title: Viv Reay
+  email: me@vivreay.co.uk
+  description: &gt;- # this means to ignore newlines until &quot;baseurl:&quot;
+    Viv Reay is a freelance web designer with experience in UI design, HTML, CSS, Wordpress, Adobe XD, Illustrator, Photoshop and Indesign.
+  baseurl: &quot;&quot; # the subpath of your site, e.g. /blog
+  url: &quot;&quot; # the base hostname &amp; protocol for your site, e.g. http://example.com
+  
+  github_path: https://github.com/vivr
+  
+  pathToBlogImgBin: /assets/img/blog/
+  pathToProjectImgBin: /assets/img/project/
+  # Build settings
+  permalink: pretty
+  markdown: kramdown
+  
+  sass:
+    sass_dir: _sass
+    style: compressed
+  collections:
+    projects:
+      output: true
+  
+  # Exclude from processing.
+  # The following items will not be processed, by default. Create a custom list
+  # to override the default setting.
+  # exclude:
+  #   - Gemfile
+  #   - Gemfile.lock
+  #   - node_modules
+  #   - vendor/bundle/
+  #   - vendor/cache/
+  #   - vendor/gems/
+  #   - vendor/ruby/
+</code>
+</pre>
+</li>
+<li>Open the <em>index.html</em> file. Delete the existing content and add the following: 
+<pre>
+<code class="language-html">
+{% raw %}
+---
+layout: default
+---
+{% endraw %}
+</code>
+</pre>
+</li>
+<li>Open the <em>thanks.html</em> file and add the following content:
+<pre>
+<code class="language-html">
+{% raw %}
+---
+layout: default
+title: Thank you!
+---
+&lt;div class=&quot;single-page&quot;&gt;
+  &lt;div class=&quot;single-page-content&quot;&gt;
+    &lt;p&gt;&lt;Your message has been successfully sent. I will get back to you soon!&gt;&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+{% endraw %}
+</code>
+</pre>
+</li>
+<li>Open the <em>404.html</em> file and add the following content:
+<pre>
+<code class="language-html">
+{% raw %}
+---
+layout: default
+permalink: /404.html
+---
+&lt;div class=&quot;single-page&quot;&gt;
+  &lt;div class=&quot;single-page-content&quot;&gt;
+    &lt;p&gt;&lt;Sorry. The requested page could not be found.&gt;&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+{% endraw %}
+</code>
+</pre>
+</li>
+<li>Open the <em>about.html</em> file and add the following content:
+<pre>
+<code class="language-html">
+{% raw %}
+---
+layout: default
+title: About me
+---
+&lt;div class=&quot;single-page&quot;&gt;
+  &lt;div class=&quot;single-page-content&quot;&gt;
+    &lt;p&gt;I have experience in user interface design, HTML, CSS, Wordpress themes, Adobe Indesign, Photoshop, Illustrator and XD. Feel free to &lt;a href=&quot;{{ site.baseurl }}/contact&quot;&gt;contact me&lt;/a&gt; to discuss your next project.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+{% endraw %}
+</code>
+</pre>
+</li>
+
+<li>Open the <em>blog.html</em> file and add the following content:
+<pre>
+<code class="language-html">
+{% raw %}
+---
+layout: default
+title: Notes
+---
+&lt;div class=&quot;posts-start&quot;&gt;
+{% for post in site.posts %}
+
+&lt;a href=&quot;{{ post.url }}&quot; title=&quot;{{ post.title }}&quot;&gt;
+  &lt;div class=&quot;posts-start-item&quot;&gt;
+    {% if post.itemType == 'video' %}
+    &lt;video class=&quot;posts-start-vid&quot; autoplay loop muted playsinline&gt;
+    &lt;source src=&quot;{{ site.baseurl }}{{ site.pathToBlogImgBin }}{{ post.featImg }}&quot; type=&quot;video/mp4&quot;&gt;
+    &lt;/video&gt;
+    {% else %}
+    &lt;img class=&quot;posts-start-img&quot; src=&quot;{{ site.baseurl }}{{ site.pathToBlogImgBin }}{{ post.featImg }}&quot; alt=&quot;{{ post.title }}&quot;&gt;
+    {% endif %}
+      &lt;div class=&quot;posts-start-caption&quot;&gt;
+          &lt;p class=&quot;posts-start-name&quot;&gt;{{ post.title }}&lt;/p&gt;
+          &lt;p class=&quot;date&quot;&gt;Posted on {{ post.date | date: &quot;%B %e, %Y&quot; }}&lt;/p&gt;
+      &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/a&gt;
+
+{% endfor %}
+&lt;/div&gt;
+{% endraw %}
+</code>
+</pre>
+</li>
+
+<li>Open the <em>contact.html</em> file and add the following content:
+<pre>
+<code class="language-html">
+{% raw %}
+---
+layout: default
+title: Get in touch
+---
+&lt;div class=&quot;single-page&quot;&gt;
+  &lt;div class=&quot;single-page-content&quot;&gt;
+    &lt;form action=&quot;#&quot; method=&quot;POST&quot;&gt;
+      &lt;label for=&quot;name&quot;&gt;Name:&lt;/label&gt;
+      &lt;input type=&quot;text&quot; name=&quot;name&quot; id=&quot;name&quot; required&gt;
+      &lt;label for=&quot;email&quot;&gt;Email:&lt;/label&gt;
+      &lt;input type=&quot;email&quot; name=&quot;_replyto&quot; id=&quot;email&quot; required&gt;
+      &lt;label for=&quot;message&quot;&gt;Message:&lt;/label&gt;
+      &lt;textarea name=&quot;message&quot; id=&quot;message&quot; rows=&quot;4&quot;&gt;&lt;/textarea&gt;
+      &lt;input type=&quot;hidden&quot; name=&quot;_next&quot; value=&quot;{{site.baseurl}}/thanks&quot; /&gt;      
+      &lt;input class=&quot;button&quot; type=&quot;submit&quot; value=&quot;Send&quot;&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+{% endraw %}
+</code>
+</pre>
+</li>
+
+<li>Open the <em>portfolio.html</em> file and add the following content:
+<pre>
+<code class="language-html">
+{% raw %}
+---
+layout: default
+title: Portfolio
+---
+&lt;div class=&quot;portfolio-start&quot;&gt;
+  {% for project in site.projects %}
+  &lt;a href=&quot;{{ project.url }}&quot; title=&quot;{{ project.title }}&quot;&gt;
+    &lt;div class=&quot;portfolio-start-item&quot;&gt;
+      {% if project.itemType == 'video' %}
+      &lt;video class=&quot;portfolio-start-vid&quot; autoplay loop muted playsinline&gt;
+      &lt;source src=&quot;{{ site.baseurl }}{{ site.pathToProjectImgBin }}{{ project.featImg }}&quot; type=&quot;video/mp4&quot;&gt;
+      &lt;/video&gt;
+      {% else %}
+      &lt;img class=&quot;portfolio-start-img&quot; src=&quot;{{ site.baseurl }}{{ site.pathToProjectImgBin }}{{ project.featImg }}&quot; alt=&quot;{{ project.title }}&quot;&gt;
+      {% endif %}
+    &lt;/div&gt;
+  &lt;/a&gt;
+  {% endfor %}
+&lt;/div&gt;
+{% endraw %}
+</code>
+</pre>
+</li>
+</ol>
+
+<h3>Manage the <em>_includes</em> folder</h3>
+
+<ol>
+<li>Open the <em>_includes/head.html</em> file and add the following content:
+<pre>
+<code class="language-html">
+{% raw %}
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;meta name=&quot;description&quot; content=&quot;{{ site.description }}&quot;&gt;
+  &lt;title&gt;{{ site.title }}&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;{{ site.baseurl }}/assets/css/styles.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;{{ site.baseurl }}/assets/css/prism.css&quot;&gt;
+  &lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;57x57&quot; href=&quot;{{ site.baseurl }}/apple-icon-57x57.png&quot;&gt;
+  &lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;60x60&quot; href=&quot;{{ site.baseurl }}/apple-icon-60x60.png&quot;&gt;
+  &lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;72x72&quot; href=&quot;{{ site.baseurl }}/apple-icon-72x72.png&quot;&gt;
+  &lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;76x76&quot; href=&quot;{{ site.baseurl }}/apple-icon-76x76.png&quot;&gt;
+  &lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;114x114&quot; href=&quot;{{ site.baseurl }}/apple-icon-114x114.png&quot;&gt;
+  &lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;120x120&quot; href=&quot;{{ site.baseurl }}/apple-icon-120x120.png&quot;&gt;
+  &lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;144x144&quot; href=&quot;{{ site.baseurl }}/apple-icon-144x144.png&quot;&gt;
+  &lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;152x152&quot; href=&quot;{{ site.baseurl }}/apple-icon-152x152.png&quot;&gt;
+  &lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;180x180&quot; href=&quot;{{ site.baseurl }}/apple-icon-180x180.png&quot;&gt;
+  &lt;link rel=&quot;icon&quot; type=&quot;image/png&quot; sizes=&quot;192x192&quot; href=&quot;{{ site.baseurl }}/android-icon-192x192.png&quot;&gt;
+  &lt;link rel=&quot;icon&quot; type=&quot;image/png&quot; sizes=&quot;32x32&quot; href=&quot;{{ site.baseurl }}/favicon-32x32.png&quot;&gt;
+  &lt;link rel=&quot;icon&quot; type=&quot;image/png&quot; sizes=&quot;96x96&quot; href=&quot;{{ site.baseurl }}/favicon-96x96.png&quot;&gt;
+  &lt;link rel=&quot;icon&quot; type=&quot;image/png&quot; sizes=&quot;16x16&quot; href=&quot;{{ site.baseurl }}/favicon-16x16.png&quot;&gt;
+  &lt;link rel=&quot;manifest&quot; href=&quot;{{ site.baseurl }}/manifest.json&quot;&gt;
+  &lt;meta name=&quot;msapplication-TileColor&quot; content=&quot;#000000&quot;&gt;
+  &lt;meta name=&quot;msapplication-TileImage&quot; content=&quot;{{ site.baseurl }}/ms-icon-144x144.png&quot;&gt;
+  &lt;meta name=&quot;theme-color&quot; content=&quot;#000000&quot;&gt;
+  &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,700&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;/head&gt;
+{% endraw %}
+</code>
+</pre>
+</li>
+<li>Open the <em>_includes/header.html</em> file and add the following content:
+<pre>
+<code class="language-html">
+{% raw %}
+&lt;header class=&quot;header&quot; id=&quot;home&quot;&gt;
+
+&lt;div class=&quot;header-icon&quot;&gt; 
+  &lt;a href=&quot;{{ site.github_path }}&quot; title=&quot;Github profile&quot; target=&quot;_blank&quot;&gt;          
+    &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;32&quot; height=&quot;32&quot; class=&quot;icon&quot;&gt;
+      &lt;title&gt;github.com/vivr&lt;/title&gt;
+    &lt;path d=&quot;M16 5.343c-6.196 0-11.219 5.023-11.219 11.219 0 4.957 3.214 9.162 7.673 10.645.561.103.766-.244.766-.54 0-.267-.01-1.152-.016-2.088-3.12.678-3.779-1.323-3.779-1.323-.511-1.296-1.246-1.641-1.246-1.641-1.02-.696.077-.682.077-.682 1.126.078 1.72 1.156 1.72 1.156 1.001 1.715 2.627 1.219 3.265.931.102-.723.392-1.219.712-1.498-2.49-.283-5.11-1.246-5.11-5.545 0-1.226.438-2.225 1.154-3.011-.114-.285-.501-1.426.111-2.97 0 0 .941-.301 3.085 1.15.894-.25 1.854-.373 2.807-.377.953.004 1.913.129 2.809.379 2.14-1.453 3.083-1.15 3.083-1.15.613 1.545.227 2.685.112 2.969.719.785 1.153 1.785 1.153 3.011 0 4.31-2.624 5.259-5.123 5.537.404.348.761 1.03.761 2.076 0 1.5-.015 2.709-.015 3.079 0 .299.204.648.772.538 4.455-1.486 7.666-5.69 7.666-10.645 0-6.195-5.023-11.219-11.219-11.219z&quot;/&gt;&lt;/svg&gt;
+  &lt;/a&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;header-brand&quot;&gt;
+  &lt;h1&gt;
+      &lt;a href=&quot;{{ site.baseurl }}/&quot;&gt;
+        &lt;span class=&quot;header-title&quot;&gt;Viv Reay&lt;/span&gt;
+        &lt;span class=&quot;header-sub&quot;&gt;Web Design&lt;/span&gt;
+      &lt;/a&gt;
+  &lt;/h1&gt;
+&lt;/div&gt;
+
+{% include nav.html %}
+
+&lt;div class=&quot;page-title&quot;&gt;
+	&lt;h2&gt;{{ page.title }}&lt;/h2&gt;
+  {% if page.pageType == 'blog' %}
+  &lt;p class=&quot;date&quot;&gt;Posted on {{ page.date | date: &quot;%B %e, %Y&quot; }}&lt;/p&gt;
+  {% endif %}
+&lt;/div&gt;
+
+&lt;/header&gt;
+{% endraw %}
+</code>
+</pre>
+</li> 
+<li>Open the <em>_includes/js-link.html</em> file and add the following content:
+<pre>
+<code class="language-html">
+{% raw %}
+&lt;script src=&quot;{{ site.baseurl }}/assets/js/prism.js&quot;&gt;&lt;/script&gt;
+{% endraw %}
+</code>
+</pre>
+</li>
+<li>Open the <em>_includes/nav.html</em> file and add the following content:
+<pre>
+<code class="language-html">
+{% raw %}
+&lt;nav class=&quot;navigation&quot;&gt;
+  &lt;ul class=&quot;navigation-list&quot;&gt;
+    &lt;li class=&quot;navigation-item&quot;&gt;&lt;a href=&quot;{{ site.baseurl }}/portfolio&quot; class=&quot;{% if page.pageType == 'project' or page.title == 'Portfolio' %}navigation-item-current{% endif %}&quot;&gt;Portfolio&lt;/a&gt;&lt;/li&gt;
+    &lt;li class=&quot;navigation-item&quot;&gt;&lt;a href=&quot;{{ site.baseurl }}/blog&quot; class=&quot;{% if page.pageType == 'blog' or page.title == 'Notes' %}navigation-item-current{% endif %}&quot;&gt;Notes&lt;/a&gt;&lt;/li&gt;
+    &lt;li class=&quot;navigation-item&quot;&gt;&lt;a href=&quot;{{ site.baseurl }}/about&quot; class=&quot;{% if page.title == 'About me' %}navigation-item-current{% endif %}&quot;&gt;About&lt;/a&gt;&lt;/li&gt;
+    &lt;li class=&quot;navigation-item&quot;&gt;&lt;a href=&quot;{{ site.baseurl }}/contact&quot; class=&quot;{% if page.title == 'Get in touch' %}navigation-item-current{% endif %}&quot;&gt;Contact&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+{% endraw %}
+</code>
+</pre>
+</li>
+<li>Open the <em>_includes/prevnext.html</em> file and add the following content:
+<pre>
+<code class="language-html">
+{% raw %}
+{% if page.collection %}
+  {% assign posts = site[page.collection] | where:&quot;layout&quot;, &quot;post&quot; | sort: 'date' %}
+
+  {% if posts.size &gt; 1 %}
+    {% assign prevurl = posts.last.url %}
+    {% assign nexturl = posts.first.url %}
+  {% endif %}
+
+  {% for links in posts %}
+    {% if links.title == page.title %}
+      {% unless forloop.first %}
+        {% assign prevurl = prev.url %}
+      {% endunless %}
+      {% unless forloop.last %}
+        {% assign next = posts[forloop.index] %}
+        {% assign nexturl = next.url %}
+      {% endunless %}
+    {% endif %}
+    {% assign prev = links %}
+  {% endfor %}
+
+  &lt;div class=&quot;prevnext-links&quot;&gt;
+      {% if posts.size &gt; 1 %}
+        {% if prevurl %}&lt;a href=&quot;{{prevurl}}&quot; class=&quot;prev&quot;&gt;Prev&lt;/a&gt;{% endif %}
+        {% if nexturl %}&lt;a href=&quot;{{nexturl}}&quot; class=&quot;nxt&quot;&gt;Next&lt;/a&gt;{% endif %}
+      {% endif %}
+  &lt;/div&gt;
+{% endif %}
+{% endraw %}
+</code>
+</pre>
+</li>
+</ol>
+
+<h3>Manage the <em>_layouts</em> folder</h3>
+
+<ol>
+<li>Open the <em>_layouts/default.html</em> file and add the following content:
+<pre>
+<code class="language-html">
+{% raw %}
+{% include head.html %}
+&lt;body class=&quot;site&quot;&gt;
+&lt;a href=&quot;#content&quot; class=&quot;skip-link screen-reader-text&quot;&gt;Skip to content&lt;/a&gt;
+	&lt;div class=&quot;container&quot;&gt;
+		{% include header.html %}
+		&lt;main id=&quot;content&quot; class=&quot;content&quot;&gt;
+      {{ content }}
+    &lt;/main&gt;
+		{% include js-link.html %}
+	&lt;/div&gt;&lt;!-- END container --&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+{% endraw %}
+</code>
+</pre>
+</li>
+<li>Open the <em>_layouts/post.html</em> file and add the following content:
+<pre>
+<code class="language-html">
+{% raw %}
+---
+layout: default
+---
+&lt;div class=&quot;post&quot;&gt;	
+  {{ content }}
+  {% include prevnext.html %}
+&lt;/div&gt;&lt;!-- END post --&gt;
+{% endraw %}
+</code>
+</pre>
+</li>
+</ol>
+
+<h3>Manage the <em>assets</em> folder</h3>
+<ol>
+<li>Open the <em>assets/css/styles.scss</em> file and add the following content:
+<pre>
+<code class="language-html">
+{% raw %}
+---
+---
+@import "main"
+{% endraw %}
+</code>
+</pre>
+</li>
+</ol>
+
+<h3>Manage the <em>_sass</em> folder</h3>
+<ol>
+<li>Open the <em>_sass</em> folder and create the following files:
+<ul>
+  <li><em>accessibility.scss</em></li>
+  <li><em>base.scss</em></li>
+  <li><em>form.scss</em></li>
+  <li><em>header.scss</em></li>
+  <li><em>portfolio-start-page.scss</em></li>
+  <li><em>posts-start-page.scss</em></li>
+  <li><em>single-pages.scss</em></li>
+  <li><em>single-post.scss</em></li>
+  <li><em>styles.scss</em></li>
+  <li><em>variables.scss</em></li>
+</ul>
+</li>
+<li>Open the <em>_sass/accessibility.scss</em> file and add the following content:
+<pre>
+<code class="language-scss">
+.screen-reader-text {
+  clip: rect(1px, 1px, 1px, 1px);
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+
+.screen-reader-text:hover,
+.screen-reader-text:active,
+.screen-reader-text:focus {
+  background-color: $color-black;
+  clip: auto !important;
+  color: $color-white;
+  display: block;
+  font-size: 1.4rem;
+  height: auto;
+  left: 0.5rem;
+  line-height: normal;
+  padding: 1.5rem 2.3rem 1.4rem;
+  text-decoration: none;
+  top: 0.5rem;
+  width: auto;
+  z-index: 1000000;
+}
+</code>
+</pre>
+</li>
+<li>Open the <em>_sass/base.scss</em> file and add the following content:
+<pre>
+<code class="language-scss">
+  *,
+  *::after,
+  *::before {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0; }
+  
+  html {
+    font-size: 62.5%; //1 rem = 10px; 10px/16px = 62.5%
+  }
+  
+  body {
+    box-sizing: border-box;
+  }
+  
+  .site {
+    color: $color-white;
+    background-color: $color-black;
+    margin: $spacing-unit * 2;
+    @media only screen and (max-width: $bp-small) {
+      margin: $spacing-unit;
+    }
+  }
+  
+  a {
+    color: $color-white;
+    text-decoration: none;
+  }
+  a:hover {
+    color: $color-light;
+  }
+  
+  p, ul, ol {
+    font-family: $base-font-family;
+    font-weight: $base-font-weight;
+    font-size: $base-font-size;
+    line-height: $base-line-height;
+  }
+  
+  ol + h3 { margin-top: $spacing-unit / 2  }
+  
+  h1,
+  h2,
+  h3,
+  label,
+  .navigation-list,
+  .prevnext-links,
+  .date,
+  .posts-start-name,
+  .button {
+    font-family: $secondary-font-family;
+    font-weight: $secondary-font-weight;
+    text-transform: uppercase;
+  }
+  
+  h2 {
+    font-size: $base-font-size;
+    font-weight: $secondary-font-weight;
+    letter-spacing: 0.2rem;
+  }
+  
+  h3, h4 {
+    font-size: $base-font-size;
+    margin-bottom: $spacing-unit / 4;
+  }
+  
+  h4 {
+    font-family: $secondary-font-family;
+    font-weight: $secondary-font-weight;
+  }
+  
+  em { 
+    font-weight: $secondary-font-weight;
+    font-style: normal; }
+  
+  img {
+    display: block;
+    border: 0;
+    width: 100%;
+    height: auto;
+  }
+  
+  .icon {
+    fill: $color-white;
+  }
+  .icon:hover, 
+  .icon:hover svg path {
+    fill: $color-light;
+    color: $color-light;
+  }
+  
+  .date {
+    font-weight: $base-font-weight;
+    font-size: $small-font-size;
+    letter-spacing: 0.2rem;
+  }  
+</code>
+</pre>
+</li>
+<li>Open the <em>_sass/form.scss</em> file and add the following content:
+<pre>
+<code class="language-scss">
+  label {
+    font-family: $secondary-font-family;
+    font-size: $base-font-size;
+    font-weight: $base-font-weight;
+    letter-spacing: 0.1rem;
+  }
+  input,
+  textarea {
+    display:block;
+    width: 100%;
+    max-width: 60rem;
+    min-width: 25rem;
+    font-family: $base-font-family;
+    font-size: $base-font-size;
+    font-weight: $base-font-weight;
+    background: $color-white;
+    border: 1px solid $color-white;
+    margin: 0.4rem $spacing-unit / 4 $spacing-unit / 2 0;
+    padding: $spacing-unit / 4;
+  }
+  
+  .button {
+    color: $color-black;
+    background: $color-light;
+    font-family: $secondary-font-family;
+    border: 1px solid $color-light;
+      &amp;:hover {
+        color: $color-light;
+        background-color: $color-black;
+      }
+    width: $spacing-unit * 2
+  }
+</code>
+</pre>
+</li>
+<li>Open the <em>_sass/header.scss</em> file and add the following content:
+<pre>
+<code class="language-scss">
+  .header {
+    display: grid;
+    grid-template-rows: [start-row] $spacing-unit * 5 [start-row-end mid-row] min-content [mid-row-end page-title-row] $spacing-unit * 2 [page-title-row-end];
+    grid-template-columns: [brand-start] 35rem [brand-end navigation-start] 1fr [navigation-end];
+    grid-gap: $spacing-unit;
+  
+      @media only screen and (max-width: $bp-medium) {
+        grid-template-rows: [start-row] $spacing-unit [start-row-end mid-row] min-content [mid-row-end nav-row] min-content [nav-row-end page-title-row]$spacing-unit * 2 [page-title-row-end];
+        grid-template-columns: [brand-start] 1fr [brand-end];
+      }
+  
+      @media only screen and (max-width: $bp-small) {
+        grid-template-rows: [start-row] $spacing-unit [start-row-end mid-row] min-content [mid-row-end nav-row] min-content [nav-row-end page-title-row]$spacing-unit [page-title-row-end];
+      }
+  
+      &amp;-brand {
+        color: $color-white;
+        line-height: $base-line-height / 2;
+        grid-row: mid-row / mid-row-end;
+      }
+  
+      &amp;-title {
+        font-weight: $secondary-font-weight;
+        font-size: $base-font-size;
+        display:block;
+        letter-spacing: 0.2rem;
+      }
+  
+      &amp;-sub {
+        font-weight: $base-font-weight;
+        font-size: $small-font-size;
+        letter-spacing: 0.4rem;
+      }
+  
+      &amp;-icon {
+        grid-column: brand-end / navigation-end;
+        justify-self: end;
+          @media only screen and (max-width: $bp-medium) {
+            grid-column: brand-start / brand-end;
+          }
+      }
+  
+  }
+  
+  .navigation {
+    grid-row: mid-row / mid-row-end;
+      @media only screen and (max-width: $bp-medium) {
+        grid-row: nav-row / nav-row-end;
+        grid-column: brand-start / brand-end;
+      }
+    transform: translateY(-1.5rem);
+    &amp;-list {
+        font-size: 5.6rem;
+        list-style: none;
+        font-size: 5.8rem;
+        line-height: $base-line-height / 1.4;
+        letter-spacing: 0.2rem;
+        text-align: right;
+        padding: 0;
+        margin: 0;
+          @media only screen and (max-width: $bp-small) {
+            font-size: 3.6rem;
+            text-align: left;
+          }
+    }
+    &amp;-item {
+      &amp;-current {
+          color: $color-light;
+        }
+      }
+    }
+  
+  .page-title {
+    grid-row: page-title-row / page-title-end;
+    grid-column: brand-start / brand-end;
+    line-height: $base-line-height / 1.6;
+  }  
+</code>
+</pre>
+</li>
+<li>Open the <em>_sass/porfolio-start-page.scss</em> file and add the following content:
+<pre>
+<code class="language-scss">
+  .portfolio-start {
+    display: grid;
+    grid-template-columns: minmax(25rem, 50rem);
+    grid-gap: $spacing-unit * 4;
+      @media only screen and (max-width: $bp-small) {
+        grid-gap: $spacing-unit;
+      }
+    &amp;-img {
+      transition:all 0.3s ease;
+      &amp;:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+</code>
+</pre>
+</li>
+<li>Open the <em>_sass/posts-start-page.scss</em> file and add the following content:
+<pre>
+<code class="language-scss">
+  .posts-start {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    grid-gap: $spacing-unit * 4;
+    @media only screen and (max-width: $bp-small) {
+      grid-gap: $spacing-unit;
+    }
+    &amp;-item {
+      display: grid;
+      grid-gap: $spacing-unit * 2;
+      @media only screen and (max-width: $bp-small) {
+        grid-gap: $spacing-unit / 2;
+      }
+    }
+    &amp;-img {
+      transition:all 0.3s ease;
+      &amp;:hover {
+        transform: scale(1.1);
+      }
+    }
+    &amp;-caption {
+      color: $color-white;
+      text-align: center;
+      &amp;:hover {
+        color: $color-light;
+      }
+    }
+    &amp;-name { 
+      font-size: $base-font-size;
+      font-weight: $secondary-font-weight;
+      letter-spacing: 0.1rem;
+      line-height: $base-line-height / 1.6;
+    }
+  }
+</code>
+</pre>
+</li>
+<li>Open the <em>_sass/single-pages.scss</em> file and add the following content:
+<pre>
+<code class="language-scss">
+  .single-page {
+    display: grid;
+    grid-template-columns: [left-start] 19rem [left-end center-start] minmax(35rem, 65rem) [center-end right-start] 1fr [right-end];
+    grid-gap: $spacing-unit * 4;
+  
+    @media only screen and (max-width: $bp-large) {
+      grid-template-columns: [left-start] 19rem [left-end center-start] 1fr [center-end];
+    }
+    @media only screen and (max-width: $bp-medium) {
+      grid-template-columns: [center-start] 1fr [center-end];
+      grid-gap: 0;
+    }
+
+    &-content {
+      grid-column: center-start / center-end;
+    }
+  }
+  
+.single-page-content {
+  grid-column: center-start / center-end;
+}
+</code>
+</pre>
+</li>
+<li>Open the <em>_sass/single-post.scss</em> file and add the following content:
+<pre>
+<code class="language-scss">
+  .post {
+    display: grid;
+    grid-template-columns: [left-start] 19rem [left-end center-start] minmax(35rem, 93.5rem) [center-end right-start] 1fr [right-end];
+    grid-gap: $spacing-unit * 4;
+    
+        @media only screen and (max-width: $bp-large) {
+          grid-template-columns: [left-start] 19rem [left-end center-start] minmax(10rem, 1fr) [center-end];
+        }
+        @media only screen and (max-width: $bp-medium) {
+          grid-template-columns: [center-start] minmax(10rem, 1fr) [center-end];
+          grid-gap: 0;
+        }
+    
+      &amp;-main {
+        grid-row: 1 / 2;
+        grid-column: center-start / center-end;
+        p, ul {
+          &amp;:not(last-child) {
+            margin-bottom: $spacing-unit / 2;
+          }
+        }
+        ul li {
+          margin-left: $spacing-unit;
+        }
+        a {
+          font-weight: $secondary-font-weight;
+        }
+      }
+      &amp;-image {
+        max-width: 93.5rem;
+        margin: $spacing-unit / 2 0;
+      }
+    }
+    
+    li + .post-image {  margin-top: $spacing-unit / 1.5; }
+    
+    figure&gt;img {
+      display: block;
+      max-width: 93.5rem;
+      border: $spacing-unit / 4 solid $color-white;
+    }
+    
+    figure&gt;figcaption {
+      display: block;
+      width: 80%;
+      color: $color-black;
+      background-color: $color-white;
+      font-family: $base-font-family;
+      font-weight: $base-font-weight;
+      font-size: $small-font-size;
+      line-height: $base-line-height;
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+      padding: 0 $spacing-unit / 4 $spacing-unit / 4 $spacing-unit / 4 ;
+    }
+    
+    .prevnext-links {
+      display: flex;
+      justify-content: space-between;
+      font-size: $small-font-size;
+      font-weight: $base-font-weight;
+      letter-spacing: 0.1rem;
+      grid-column: center-start / center-end;
+    }
+    
+    pre {
+      margin: 2rem 0 !important;
+      font-size: 1.4rem;
+    }
+    
+    .toolbar-item {
+      text-transform: uppercase;
+      font-family: $base-font-family;
+      font-weight: $base-font-weight;
+      font-size: $base-font-size;
+      margin-right: $spacing-unit / 4;
+    }
+</code>
+</pre>
+</li>
+<li>Open the <em>_sass/styles.scss</em> file and add the following content:
+<pre>
+<code class="language-scss">
+  @import &quot;variables&quot;;
+  @import &quot;base&quot;;
+  @import &quot;accessibility&quot;;
+  @import &quot;header&quot;;
+  @import &quot;portfolio-start-page&quot;;
+  @import &quot;posts-start-page&quot;;
+  @import &quot;single-post&quot;;
+  @import &quot;single-pages&quot;;
+  @import &quot;form&quot;;
+</code>
+</pre>
+</li>
+<li>Open the <em>_sass/variables.scss</em> file and add the following content:
+<pre>
+<code class="language-scss">
+  @charset &quot;utf-8&quot;;
+
+  $base-font-family: 'Open Sans', sans-serif;
+  $secondary-font-family: 'Montserrat', sans-serif;
+  $base-font-size:   1.6rem;
+  $base-font-weight: 400;
+  $secondary-font-weight: 700;
+  $small-font-size:  $base-font-size * 0.75;
+  $base-line-height: 1.8;
+  $spacing-unit: 4rem;
+  
+  $color-light:      #cebc81;
+  $color-black:      #000000;
+  $color-white:      #ffffff;
+  
+  $bp-large: 75em;   // 1200px
+  $bp-medium: 62.5em;   // 1000px
+  $bp-small: 37.5em;    // 600px;
+</code>
+</pre>
+</li>
+</ol>
+
+<h3>Manage the <em>_posts</em> folder</h3>
+
+<p>The <em>_posts</em> folder contains all of our blog posts. To add a blog post first create a new file with the following format: <em>YEAR-MONTH-DAY-title.MARKUP</em>. For example, the <em>React Notes</em> blog post file name is <em>2018-09-12-react-notes-1.html</em>.</p>
+<p>All blog posts must begin with front matter. The <em>2018-09-12-react-notes-1.html</em> blog post has the following front matter:</p>
+<pre>
+<code class="language-html">
+{% raw %}
+---
+layout: post
+title: &quot;React Notes&quot;
+categories: react
+featImg: react.jpg
+itemType: image
+pageType: blog
+date: 2018-09-12 11:22:45 +0100
+---
+{% endraw %}
+</code>
+</pre>
+
+<h3>Manage the <em>_projects</em> folder</h3>
+
+<p>The <em>_projects</em> folder contains all of the files in our projects collection. To add a file to the collection, create a new file inside the <em>_projects</em> folder. All files that are part of a collection must begin with front matter. For example, the <em>ckw.html</em> file has the following front matter:</p>
+<pre>
+<code class="language-html">
+{% raw %}
+---
+layout: post
+title: CKW Trading
+featImg: ckw.jpg
+itemType: image
+pageType: project
+date: 2018-08-06 11:17:59 +0100
+---
+{% endraw %}
+</code>
+</pre>
+
+<h3>Sources</h3>
+<p><a href="https://www.youtube.com/watch?v=88XBBBEQPDM&list=PLygcmZoi1k1CRU9pQ3SZPTkE-KFEe1ANh&index=5" target="_blank">Jekyll project (video 5)</a> by <a href="https://www.youtube.com/channel/UCWfGm9LosEAeQVMZsp2HgAw" target="_blank">Zackary R Newton</a></p>
+
+</div><!-- END post__main -->

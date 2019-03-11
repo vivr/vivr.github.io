@@ -1,0 +1,34 @@
+.posts-start {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+  grid-gap: $spacing-unit * 4;
+  @media only screen and (max-width: $bp-small) {
+    grid-gap: $spacing-unit;
+  }
+  &-item {
+    display: grid;
+    grid-gap: $spacing-unit * 2;
+    @media only screen and (max-width: $bp-small) {
+      grid-gap: $spacing-unit / 2;
+    }
+  }
+  &-img {
+    transition:all 0.3s ease;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+  &-caption {
+    color: $color-white;
+    text-align: center;
+    &:hover {
+      color: $color-light;
+    }
+  }
+  &-name { 
+    font-size: $base-font-size;
+    font-weight: $secondary-font-weight;
+    letter-spacing: 0.1rem;
+    line-height: $base-line-height / 1.6;
+  }
+}

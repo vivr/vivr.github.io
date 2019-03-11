@@ -1,0 +1,32 @@
+label {
+  font-family: $secondary-font-family;
+  font-size: $base-font-size;
+  font-weight: $secondary-font-weight;
+  letter-spacing: 0.1rem;
+}
+input,
+textarea {
+  display:block;
+  width: 100%;
+  max-width: 60rem;
+  min-width: 25rem;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  font-weight: $base-font-weight;
+  background: $color-white;
+  border: 1px solid $color-white;
+  margin: 0.4rem $spacing-unit / 4 $spacing-unit / 2 0;
+  padding: $spacing-unit / 4;
+}
+
+.button {
+  color: $color-black;
+  background: $color-light;
+  font-family: $secondary-font-family;
+  border: 1px solid $color-light;
+    &:hover {
+      color: $color-light;
+      background-color: $color-black;
+    }
+  width: $spacing-unit * 2
+}

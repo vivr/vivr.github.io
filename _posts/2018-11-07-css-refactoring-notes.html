@@ -1,0 +1,139 @@
+---
+layout: post
+title: "CSS Refactoring Notes"
+categories: css
+featImg: css-refactor.jpg
+itemType: image
+pageType: blog
+date: 2018-11-07 09:42:21 +0100
+---
+<div class="post-main">
+
+<h3>What is CSS refactoring?</h3>
+
+<p>CSS refactoring is a way of making existing CSS code simpler, more efficient and easier to maintain. Some main goals to keep in mind:</p>
+    <ul>
+        <li>Rewrite to reduce complexity: simplify and only use what you need</li>
+        <li>Make it reusable: reduce the amount of code</li>
+        <li>Flexibility: easier to make changes or extend features</li>
+        <li>Make code easy to read - use white space, add comments, use descriptive class names</li>
+    </ul>
+
+<h3>Set up new npm package configuration</h3>
+<p>Open the terminal inside your project and run <code class="language-bash">npm init</code> which will open a wizard to walk through building a package.json file.</p>
+
+
+<h3>Install stylelint</h3>
+<p>Stylelint (<a href="https://stylelint.io/" target="_blank">https://stylelint.io</a>) looks for errors in our CSS files, flags them and tells us how to fix them.</p>
+<p>Open the terminal inside your project and run <code class="language-bash">npm install stylelint --save-dev</code></p>
+
+<h3>Install stylelint rules</h3>
+<p>The stylelint-config-standard package explains all the rules that we want to be applied when using stylelint. You can read more about this on the github repo page: <a href="https://github.com/stylelint/stylelint-config-standard" target="_blank">https://github.com/stylelint/stylelint-config-standard</a></p>
+<ol>
+<li>Open the terminal inside your project and run <code class="language-bash">npm install stylelint-config-standard --save-dev</code>
+</li>
+<li>To use the standard package rules we need to create a configuration file called .stylelintrc and paste in the following json code:
+<pre>
+<code class="language-json">
+{
+    "extends": "stylelint-config-standard"
+}
+</code>
+</pre>
+</li>
+</ol>
+
+
+<h3>Install stylelint extension in Visual Studio Code</h3>
+<ol>
+    <li>Open the extensions option in Visual Studio code and search for 'stylelint'</li>
+    <li>Install the extention called stylelint by Shinnasuke Watanabe</li>
+    <li>Once installed we need to make a change to our configuration settings to prevent conflicts from other extensions. Open Workspace Settings with ctrl + , on Windows (cmd + , on Mac) then click 'More Actions' and select 'Open settings.json'. Add the following code:
+<pre>
+<code class="language-json">
+{
+    "css.validate": false,
+    "less.validate": false,
+    "scss.validate": false
+}
+</code>
+</pre>
+    </li>
+</ol>
+
+<h3>Install the Prettier NPM package</h3>
+<p>Prettier and stylelint can be used together to find and fix errors in our css code.</p>
+<ol>
+    <li>Open the terminal inside your project and run <code class="language-bash">npm install prettier --save-dev</code></li>
+    <li>Still in the terminal run <code class="language-bash">npm install prettier-stylelint --save-dev</code></li>
+    <li>Open the .stylelintrc file and paste the following code (replace the existing code):
+<pre>
+<code class="language-json">
+{
+    "extends": [
+        "stylelint-config-standard",
+        "./node_modules/prettier-stylelint/config.js"
+    ]
+}
+</code>
+</pre>
+    </li>
+</ol>
+
+<h3>Install prettier extension in Visual Studio Code</h3>
+
+<ol>
+    <li>Open the extensions option in Visual Studio code and search for 'prettier'</li>
+    <li>Install the extention called Prettier - Code formatter by Esben Peterson</li>
+    <li>Once installed open Workspace Settings with ctrl + , on Windows (cmd + , on Mac) then click 'More Actions' and select 'Open settings.json'. Paste the following code (replacing existing code):
+<pre>
+<code class="language-json">
+{
+    "css.validate": false,
+    "less.validate": false,
+    "scss.validate": false,
+    "prettier.stylelintIntegration": true,
+    "[css]": {
+        "editor.formatOnSave": true
+    }
+}
+</code>
+</pre>
+    </li>
+</ol>
+
+
+<h3>Property order structure</h3>
+
+<p>Property has no impact on how CSS works and is only used to impose further structure onto our styles.</p>
+<ol>
+    <li>Positioning (position, top, left, etc.)</li>
+    <li>Box model (display, width, margin, flex, etc.)</li>
+    <li>Typography (font-family, weight, size, color, columns, etc)</li>
+    <li>Visual (list, border, background, transforms, etc.)</li>
+    <li>Animation (transition, animation, etc.)</li>
+    <li>Other (clip, pointer events, SVG features, etc)</li>
+</ol>
+
+<h4>Install stylelint-config-rational-order</h4>
+<ol>
+    <li>Open the terminal inside your project and run <code class="language-bash">npm install stylelint-config-rational-order --save-dev</code></li>
+    <li>Open the .stylelintrc file and paste the following code (replace the existing code):
+<pre>
+<code class="language-json">
+{
+    "extends": [
+        "stylelint-config-standard",
+        "./node_modules/prettier-stylelint/config.js",
+        "stylelint-config-rational-order"
+    ]
+}
+</code>
+</pre>
+    </li>
+</ol>
+
+<h3>Source</h3>
+<p><a href="https://www.linkedin.com/learning/css-refactoring-style-sheets" target="_blank">CSS: Refactoring Style Sheets (2018)</a> by <a href="https://www.linkedin.com/learning/instructors/morten-rand-hendriksen" target="_blank">Morten Rand-Hendriksen</a></p>
+
+</div><!-- END post-main -->

@@ -1,0 +1,77 @@
+.header {
+  display: grid;
+  grid-template-rows: [start-row] $spacing-unit * 5 [start-row-end mid-row] min-content [mid-row-end page-title-row] $spacing-unit * 2 [page-title-row-end];
+  grid-template-columns: [brand-start] 35rem [brand-end navigation-start] 1fr [navigation-end];
+  grid-gap: $spacing-unit;
+
+    @media only screen and (max-width: $bp-medium) {
+      grid-template-rows: [start-row] $spacing-unit [start-row-end mid-row] min-content [mid-row-end nav-row] min-content [nav-row-end page-title-row]$spacing-unit * 2 [page-title-row-end];
+      grid-template-columns: [brand-start] 1fr [brand-end];
+    }
+
+    @media only screen and (max-width: $bp-small) {
+      grid-template-rows: [start-row] $spacing-unit [start-row-end mid-row] min-content [mid-row-end nav-row] min-content [nav-row-end page-title-row]$spacing-unit [page-title-row-end];
+    }
+
+    &-brand {
+      color: $color-white;
+      line-height: $base-line-height / 2;
+      grid-row: mid-row / mid-row-end;
+    }
+
+    &-title {
+      font-weight: $secondary-font-weight;
+      font-size: $base-font-size;
+      display:block;
+      letter-spacing: 0.2rem;
+    }
+
+    &-sub {
+      font-weight: $base-font-weight;
+      font-size: $small-font-size;
+      letter-spacing: 0.4rem;
+    }
+
+    &-icon {
+      grid-column: brand-end / navigation-end;
+      justify-self: end;
+        @media only screen and (max-width: $bp-medium) {
+          grid-column: brand-start / brand-end;
+        }
+    }
+
+}
+
+.navigation {
+  grid-row: mid-row / mid-row-end;
+    @media only screen and (max-width: $bp-medium) {
+      grid-row: nav-row / nav-row-end;
+      grid-column: brand-start / brand-end;
+    }
+  transform: translateY(-1.5rem);
+  &-list {
+      font-size: 5.6rem;
+      list-style: none;
+      font-size: 5.8rem;
+      line-height: $base-line-height / 1.4;
+      letter-spacing: 0.2rem;
+      text-align: right;
+      padding: 0;
+      margin: 0;
+        @media only screen and (max-width: $bp-small) {
+          font-size: 3.6rem;
+          text-align: left;
+        }
+  }
+  &-item {
+    &-current {
+        color: $color-light;
+      }
+    }
+  }
+
+.page-title {
+  grid-row: page-title-row / page-title-end;
+  grid-column: brand-start / brand-end;
+  line-height: $base-line-height / 1.6;
+}

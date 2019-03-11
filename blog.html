@@ -1,0 +1,25 @@
+---
+layout: default
+title: Notes
+---
+<div class="posts-start">
+{% for post in site.posts %}
+
+<a href="{{ post.url }}" title="{{ post.title }}">
+  <div class="posts-start-item">
+    {% if post.itemType == 'video' %}
+    <video class="posts-start-vid" autoplay loop muted playsinline>
+    <source src="{{ site.baseurl }}{{ site.pathToBlogImgBin }}{{ post.featImg }}" type="video/mp4">
+    </video>
+    {% else %}
+    <img class="posts-start-img" src="{{ site.baseurl }}{{ site.pathToBlogImgBin }}{{ post.featImg }}" alt="{{ post.title }}">
+    {% endif %}
+      <div class="posts-start-caption">
+          <p class="posts-start-name">{{ post.title }}</p>
+          <p class="date">Posted on {{ post.date | date: "%B %e, %Y" }}</p>
+      </div>
+  </div>
+</a>
+
+{% endfor %}
+</div>

@@ -1,0 +1,19 @@
+---
+layout: default
+title: Portfolio
+---
+<div class="portfolio-start">
+  {% for project in site.projects %}
+  <a href="{{ project.url }}" title="{{ project.title }}">
+    <div class="portfolio-start-item">
+      {% if project.itemType == 'video' %}
+      <video class="portfolio-start-vid" autoplay loop muted playsinline>
+      <source src="{{ site.baseurl }}{{ site.pathToProjectImgBin }}{{ project.featImg }}" type="video/mp4">
+      </video>
+      {% else %}
+      <img class="portfolio-start-img" src="{{ site.baseurl }}{{ site.pathToProjectImgBin }}{{ project.featImg }}" alt="{{ project.title }}">
+      {% endif %}
+    </div>
+  </a>
+  {% endfor %}
+</div>

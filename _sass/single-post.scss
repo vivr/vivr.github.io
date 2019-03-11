@@ -1,0 +1,77 @@
+.post {
+display: grid;
+grid-template-columns: [left-start] 19rem [left-end center-start] minmax(35rem, 93.5rem) [center-end right-start] 1fr [right-end];
+grid-gap: $spacing-unit * 4;
+
+    @media only screen and (max-width: $bp-large) {
+      grid-template-columns: [left-start] 19rem [left-end center-start] minmax(10rem, 1fr) [center-end];
+    }
+    @media only screen and (max-width: $bp-medium) {
+      grid-template-columns: [center-start] minmax(10rem, 1fr) [center-end];
+      grid-gap: 0;
+    }
+
+  &-main {
+    grid-row: 1 / 2;
+    grid-column: center-start / center-end;
+    p, ul {
+      &:not(last-child) {
+        margin-bottom: $spacing-unit / 2;
+      }
+    }
+    ul li {
+      margin-left: $spacing-unit;
+    }
+    a {
+      font-weight: $secondary-font-weight;
+    }
+  }
+  &-image {
+    max-width: 93.5rem;
+    margin: $spacing-unit / 2 0;
+  }
+}
+
+li + .post-image {  margin-top: $spacing-unit / 1.5; }
+
+figure>img {
+  display: block;
+  max-width: 93.5rem;
+  border: $spacing-unit / 4 solid $color-white;
+}
+
+figure>figcaption {
+  display: block;
+  width: 80%;
+  color: $color-black;
+  background-color: $color-white;
+  font-family: $base-font-family;
+  font-weight: $base-font-weight;
+  font-size: $small-font-size;
+  line-height: $base-line-height;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  padding: 0 $spacing-unit / 4 $spacing-unit / 4 $spacing-unit / 4 ;
+}
+
+.prevnext-links {
+  display: flex;
+  justify-content: space-between;
+  font-size: $small-font-size;
+  font-weight: $base-font-weight;
+  letter-spacing: 0.1rem;
+  grid-column: center-start / center-end;
+}
+
+pre {
+  margin: 2rem 0 !important;
+  font-size: 1.4rem;
+}
+
+.toolbar-item {
+  text-transform: uppercase;
+  font-family: $base-font-family;
+  font-weight: $base-font-weight;
+  font-size: $base-font-size;
+  margin-right: $spacing-unit / 4;
+}

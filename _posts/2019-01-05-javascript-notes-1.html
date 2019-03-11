@@ -1,0 +1,319 @@
+---
+layout: post
+title: "Javascript Notes"
+categories: javascript
+featImg: javascript.jpg
+itemType: image
+pageType: blog
+date: 2019-01-05 16:21:59 +0100
+---
+<div class="post-main">
+
+<h3>What is Javascript?</h3>
+<p>Javascript is a programming language widely used for changing things that happen in the web browser. The language can be used as part of web pages on the client-side and can also be used on the server-side with node.js.</p>
+
+<h3>What is the DOM?</h3>
+
+<p>HTML elements such as tags, attributes and text on a page are collected up by the browser and interpreted as the DOM (Document Object Model). The DOM gives languages like CSS and JavaScript a way to define and modify an existing document. Every element in the DOM including the text and attributes are considered nodes. Nodes can be both parent and have children elements. Elements on the same level and with the same parent are known as siblings. For example <em>li</em> tags would be considered siblings. The first and last children of an element are known as <em>first child</em> and <em>last child</em>. The rest of the children in the element are known as child nodes.</p>
+
+<h4>Selecting DOM elements</h4>
+<p>The easiest way to select elements with JavaScript is to specify CSS selectors. The <code class="language-javascript">querySelector</code> method returns a single element. If you want to select a collection of elements then <code class="language-javascript">querySelectorAll</code> is the better choice. This returns multiple elements in an array like object which supports many common array methods.</p>
+
+<p>Both <code class="language-javascript">querySelector</code> and <code class="language-javascript">querySelectorAll</code> are methods of the document object. So any time you use either method you have to preface it with <code class="language-javascript">document</code>. e.g. <code class="language-javascript">document.querySelectorAll</code>.</p>
+
+<p>When you select an element with <code class="language-javascript">querySelector</code> you get back a reference to the element along with properties and methods that are part of that element. For example, the attribute list and class list.</p>
+
+<h3>JavaScript events</h3>
+<p>In order for a web app to become interactive and respond to events we need to do 3 things. First, we need to select the element that we want the user to interact with. Second, we have to specify what specific event should trigger the interaction (e.g. <code class="language-javascript">load</code> for a page or <code class="language-javascript">click</code> for a button). Finally, we need to specify what should happen in response to the event.</p>
+
+<p>Vanilla JavaScript supports a few different ways to specify code to respond to an event on a specific element. The best way to do this is using an event listener:</p>
+
+<pre>
+<code class="language-javascript">
+document.querySelector('li').addEventListener('click', function(e){
+	e.preventDefault();
+	data.clickX = e.screenX;
+	data.clickY = e.screenY;
+}, false);
+</code>
+</pre>
+
+<p>The <code class="language-javascript">addEventListener</code> method takes 3 arguments. The first is a string containing the name of the event like <code class="language-javascript">load</code> or <code class="language-javascript">click</code>. The second argument is either a call to an external function or an anonymous function which contains the code that should run after the event happenes on that element. For backward compatibility it's best to include a third argument which is the boolean value <code class="language-javascript">false</code>. This is an optional argument that lets you specify whether the event uses event capturing. Even though modern browsers assume a default value of false if this argument isn't specified some older browsers require it so it's a best practice to include it.</p>
+
+<p>When the event being listened for occurs the specified function is called and an event object is passed to it. If you include a parameter in your function your code can make use of the properties and methods of the event object. Any parameter name can be used but some common conventions are <code class="language-javascript">event</code>, <code class="language-javascript">evt</code> or <code class="language-javascript">e</code>.</p>
+
+<p>One common use of an event object method is <code class="language-javascript">preventDefault</code> which stops the default behaviour of the event on the object. This is often useful for buttons in forms when you want to capture a button click without immediately submitting the form and reloading the page.</p>
+
+<p>You can also access a number of properties about the event itself. For example, the event object for a click event includes the screenX and screenY properties containing the X and Y coordinates of the users click on the screen. As well as the boolean shift key, control key and alt key properties indicating whether these keys were held during the click.</p>
+
+<p>You can technically register an event using an event attribute in HTML. For example, specifyiing an onclick event and setting it's value equal to the name of an event handler function or a string containing JavaScript code: <code class="language-javascript">&lt;li onclick=&quot;listHandler&quot;&gt;&lt;/li&gt;</code>. This is not done anymore because it's a best practice to keep JavaScript code separate from HTML code in separate files.</p>
+
+<h3>Animations</h3>
+<p>If your animation needs exceed what CSS can offer then vanilla JavaScript has some additional tools. One tool involves creating scripted content for an HTML canvas element and then changing the appearance of the content using the <code class="language-javascript">setInterval()</code> function, <code class="language-javascript">setTimeout()</code> function, or <code class="language-javascript">requestAnimationFrame()</code> methods. These allow you to create a frame by frame animation and are a common solution for developers when replacing content that was formerly built using Flash.</p>
+
+<h3>Basic rules for writing javascript</h3>
+<ol>
+<li>JavaScript is case sensitive.</li>
+<li>Variables, functions and methods are written in camelCase (e.g. <code>var firtsName;</code>).</li>
+<li>Objects and classes start with an uppercase letter (e.g. <code>var date = Date();</code>).</li>
+<li>Constants are in all-caps (e.g. <code>const = CONSTNAME;</code>).</li>
+<li><strong>We don't have to</strong> but it's good practice to add white space between lines and elements and semicolons to the end of each statement so the code is easier to read and maintain.</li>
+</ol>
+
+<h3>Simple debugging in the console</h3>
+<ul>
+	<li><em>Console log</em> can be used to output data to the console: <code class="language-javascript">console.log(name);</code></li>
+	<li>We can get data from the console by using <em>prompt</em>: <code class="language-javascript">var lastName = prompt('What is your last name?');</code></li>
+	<li><em>alert</em> is similar to the prompt but it doesn't ask a question: <code class="language-javascript">alert(name + ' is a ' + age + ' years old ' + job + '.');</code></li>
+</ul>
+
+<h3>Variables</h3>
+<p>A variable is a container in which we can store a value in order to use it repeatedly. By saving a value in a variable we don't have to write that value each time we want to use it. When we declare a variable it looks like this: <code class="language-javascript">var name = 'Viv';</code>. The quotes can be double or single. A variable name which is composed of two or more parts is written in camelCase: <code class="language-javascript">var lastName = 'Reay';</code>.</p>
+
+<h3>Data types</h3>
+<p>There are 5 primitive data types (simple data types, not objects):</p>
+<ul>
+<li><em>Number</em>: floating point numbers (JavaScript numbers always have decimals), decimals and integers.</li>
+<li><em>String</em>: sequence of characters, used for text.</li>
+<li><em>Boolean</em>: a logical data type - true or false.</li>
+<li><em>Undefined</em>: automatically assigned to a variable which has no value assigned.</li>
+<li><em>Null</em>: is used if we want a value to be empty but not undefined.</li>
+</ul>
+
+<h3>Operators</h3>
+<p>Operator precedence defines which operators are executed first and which ones are executed later.</p>
+<p>The cheatsheet on the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence" target="_blank">Mozilla Developer Operator precedence page</a> shows the precedence order of all the operators. We can see that the multiplication (*) operator has a higher precedence than subtraction (-) ar addition (+).</p>
+<pre>
+<code class="language-javascript">
+var now = 2018;
+
+birthYear = now - 22 * 2;
+//2018 - 44
+
+console.log(birthYear);
+//output 1974
+</code>
+</pre>
+<p>The cheatsheet also shows that the <em>grouping</em> operator has the highest ordered precendence. So in the example below <code class="language-javascript">(3 + 5)</code> will be executed first before everything else:</p>
+<pre>
+<code class="language-javascript">
+var ageJohn = 30;
+var ageMark = 30;
+
+ageJohn = (3 + 5) * 4 - 6;
+
+console.log(ageJohn);
+//output - 26
+</code>
+</pre>
+
+
+<h3>Conditional statements</h3>
+<p><em>if else</em>, <em>while</em> and <em>for</em> are conditional statements that can operate either on a statement or a block of code enclosed with braces.</p>
+
+<h3>Boolean Logic</h3>
+<p>Booleans are used to determine whether or not a block gets executed, where any defined variable that is neither zero nor an empty string is treated as true.</p>
+<ul>
+<li>AND(&&) => true if ALL are true</li>
+<li>OR(||) => true if ONE is true</li>
+<li>NOT(!) => inverts true/false value</li>
+</ul>
+
+<pre>
+<code class="language-javascript">
+var age = 16;
+
+age &gt;= 20; 		// false
+age &lt; 20; 		// true
+!(age &lt; 30); 	// false
+
+age &gt;= 20 &amp;&amp; age &lt; 30; 	// false
+age &gt;= 20 || age &lt; 30; 	// true
+</code>
+</pre>
+
+<h3>Switch statement</h3>
+<p>The switch statement is similar to a series of IF statements on the same variable. This is used for when you want to compare the same variable with many different values, and execute a different piece of code depending on which value it equals to.</p>
+<pre>
+<code class="language-javascript">
+var job = 'teacher';
+
+job = prompt('What does John do?');
+
+switch (job) {
+    case 'teacher':
+        console.log('John teaches kids');
+        break;
+    case 'driver':
+        console.log('John drives a cab');
+        break;
+    case 'cop':
+        console.log('John helps fight crime');
+        break;
+    default:
+        console.log('John does something else');
+}
+</code>
+</pre>
+
+<h3>Arrays</h3>
+<p>Regular variables are useful for storing numbers, strings and other single items. Arrays are a special type of variable which can be used for storing a list of items.</p>
+
+<pre>
+<code class="language-javascript">
+var users;
+users = ["Joe", "Wendy", "Julie", "Mark"];
+var thirdUser = users[2];
+
+console.log(thirdUser);
+//Julie
+</code>
+</pre>
+
+
+
+<h3>Properties and methods</h3>
+<p>In javascript objects have properties and methods. Properties are pieces of meta information about the object and methods are functions that belong to the object.</p>
+
+<p>To use a method on an object call the object then add a punctuation mark followed by the name of the method and parentheses: <code class="language-javascript">users.reverse();</code>. In some cases the method has arguments that can be passed inside the parentheses.</p>
+
+
+
+
+<h3>Functions</h3>
+
+<p>Functions can be used to segment off sections of our code to make it easier to manage or to run repeated operations or both. They wrap around code blocks which contain the actual statements to be run and typically include some combination of variable assignment operations and conditions.</p>
+
+<p>Functions do one of two things, they either create a result immediately, or provide an answer, or output, to be used by other functions called a return value.</p>
+
+<p>In javascript there are 3 types of functions:</p>
+
+<ul>
+    <li><em>Named functions</em> which are executed when called by name.</li>
+    <li><em>Anonymous functions</em> which typically run once they are triggered by a specific event.</li>
+    <li><em>Immediately invoked function expressions</em> which run the moment the browser encounters them.</li>
+</ul>
+
+<p>All functions have basically the same stucture:</p>
+
+<pre>
+<code class="language-javascript">
+function multiply() {
+    var result = 3 * 4;
+    console.log("3 multiplied by 4 is ", result);
+}
+multiply();
+
+// 3 multiplied by 4 is 12
+</code>
+</pre>
+
+<p>Anonymous functions don't have a name so the parenthesis appears right after <code>function</code>.</p>
+
+<pre>
+<code class="language-javascript">
+var divided = function () {
+    var result = 3 / 4;
+    console.log("3 divided by 4 is ", result);
+}
+divided();
+
+// 3 divided by 4 is 0.75
+</code>
+</pre>
+
+<p>Immediately invoked function expressions are anonymous functions with another parentheses pair at the end all wrapped inside perentheses.</p>
+
+<pre>
+<code class="language-javascript">
+(function() {
+    var result = 12 / 0.75;
+    console.log("12 divided by 0.75 is ", result);
+}())
+
+// 12 divided by 0.75 is 16
+</code>
+</pre>
+        
+<p>Every function comes with an arguments object which is an array of possible arguments. These arguments are separated by commas and can be passed to the function when it is called.</p>
+
+<p>Functions can return values to where they were called from using the <code class="language-javascript">return</code> keyword. Whatever is returned is not executed directly but instead captured in a variable or used immediately in another function.</p>
+
+<pre>
+<code class="language-javascript">
+function multiply (a,b) {
+    var result = a*b;
+    console.log(result);
+    return result;
+}
+var multiplied = multiply (3,4);
+</code>
+</pre>
+
+
+<h3>Type Coercion</h3>
+<p>JavaScript has something called <em>Dynamic Typing</em> which means we don't need to manually define a data type of a variable.</p>
+<p>The + sign can be used to add numbers together and it can also be used to add strings and numbers together. Numbers are automatically converted to strings.</p>
+
+<pre>
+<code class="language-javascript">
+var name = 'Viv';
+var age = 45;
+
+console.log(name + age);
+// output - Viv45
+</code>
+</pre>
+
+<p>This also happens with other data types. This is called type coercion.</p>
+
+<p>We can declare a variable without defining a value immediately. We can also define more than one variable in a single line: <code class="language-javascript">var job, isMarried</code>. The output of <code class="language-javascript">console.log(job);</code> would be <code class="language-javascript">undefined</code>.</p>
+
+<p>We can declare the value of a variable later:</p>
+<pre>
+<code class="language-javascript">
+var name = 'Viv';
+var age = 45;
+
+var job, isMarried;
+
+job = 'web designer';
+isMarried = false;
+
+console.log(name + ' is a ' + age + ' years old ' + job + '. Is she married? ' + isMarried + '.');
+// output - Viv is a 45 years old web designer. Is she married? false.
+</code>
+</pre>
+
+<h3>Variable Mutation</h3>
+<p>Changing the type of a variable is called <em>variable mutation</em>. In the following code the <em>age</em> value has been changed from a number to a string:</p>
+<pre>
+<code class="language-javascript">
+var name = 'Viv';
+var age = 45;
+
+var job, isMarried;
+
+job = 'web designer';
+isMarried = false;
+
+age = 'thirty six';
+job = 'driver';
+
+console.log(name + ' is a ' + age + ' years old ' + job + '. Is she married? ' + isMarried + '.');
+// output - Viv is a thirty six years old driver. Is she married? false.
+</code>
+</pre>
+
+
+<h3>Sources</h3>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference" target="_blank">MDN web docs - JavaScript reference</a></li>
+<li><a href="https://en.wikibooks.org/wiki/JavaScript" target="_blank">Javascript - Wikibooks</a></li>	
+<li><a href="https://www.lynda.com/JavaScript-tutorials/JavaScript-Essential-Training/574716-2.html" target="_blank">JavaScript Essential Training (2017)</a> by <a href="https://www.lynda.com/Morten-Rand-Hendriksen/725535-1.html" target="_blank">Morten Rand-Hendriksen</a></li>
+<li><a href="https://www.udemy.com/the-complete-javascript-course/?couponCode=C3WEBSITE1010&utm_source=mycoupon&utm_medium=website1010&utm_campaign=website1010" target="_blank">The Complete JavaScript Course (2016)</a> by <a href="http://codingheroes.io/" target="_blank">Jonas Schmedtmann</a></li>
+<li><a href="https://www.lynda.com/JavaScript-tutorials/Learning-App-Building-Vanilla-JavaScript/609026-2.html" target="_blank">Learning App Building with Vanilla JavaScript (2017)</a> by <a href="https://www.lynda.com/Sasha-Vodnik/7350359-1.html" target="_blank">Sasha Vodnik</a></li>
+</ul>
+
+
+</div><!-- END post-main -->

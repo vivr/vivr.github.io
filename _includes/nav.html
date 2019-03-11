@@ -1,0 +1,8 @@
+<nav class="navigation">
+  <ul class="navigation-list">
+    <li class="navigation-item"><a href="{{ site.baseurl }}/portfolio" class="{% if page.pageType == 'project' or page.title == 'Portfolio' %}navigation-item-current{% endif %}">Portfolio</a></li>
+    <li class="navigation-item"><a href="{{ site.baseurl }}/blog" class="{% if page.pageType == 'blog' or page.title == 'Notes' %}navigation-item-current{% endif %}">Notes</a></li>
+    <li class="navigation-item"><a href="{{ site.baseurl }}/about" class="{% if page.title == 'About me' %}navigation-item-current{% endif %}">About</a></li>
+    <li class="navigation-item"><a href="{{ site.baseurl }}/contact" class="{% if page.title == 'Get in touch' %}navigation-item-current{% endif %}">Contact</a></li>
+  </ul>
+</nav>

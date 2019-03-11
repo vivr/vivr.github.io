@@ -1,0 +1,1575 @@
+---
+layout: post
+title: "React Notes"
+categories: react
+featImg: react.jpg
+itemType: image
+pageType: blog
+date: 2018-09-12 11:22:45 +0100
+---
+<div class="post-main">
+
+<h3>What is React?</h3>
+<p><a href="https://reactjs.org/" target="_blank">React</a> is a javascript library used for building user interfaces. We create reusable components and these components display data as it changes over time. If you want to read about basic React concepts take a look at this <a href="https://reactjs.org/docs/hello-world.html" target="_blank">guide from reactjs.org</a>.</p>
+
+<p>The DOM is the structure of HTML elements that make up a webpage. The DOM API refers to how these page elements are accessed and changed. React makes updating the DOM faster by using DOM Diffing. DOM Diffing happens when you compare the currently rendered content with the new UI changes that are about to be made. React optimizes this by making only the minimal changes necessary. With DOM Diffing Javascript objects are compared and this is much faster than writing to or reading from the actual DOM.</p>
+
+
+<h3>Set up a development environment</h3>
+
+<p>To begin make sure that Node is installed which can be downloaded from <a href="https://nodejs.org/en/" target="_blank">nodejs.org</a>. We will also need to use the command line and a code editor.</p>
+
+<ol>
+	<li>In the terminal, run: <code class="language-bash">npm install -g create-react-app</code>. Note this web app uses <a href="https://www.npmjs.com/package/create-react-app/v/1.4.1">create-react-app version 1.4.1</a>.</li>
+	<li>Still in the terminal, navigate to your project folder and run: <code class="language-bash">create-react-app .</code></li>
+	<li>Next, install dependencies <code class="language-bash">npm install react-router-dom react-fontawesome axios react-transition-group react-simple-sidenav react-slick --save</code>. In this setup we are using the following dependencies:
+	</li>
+</ol>
+
+<ul>
+	<li><a href="https://github.com/ReactTraining/react-router/tree/master/packages/react-router-dom" target="_blank">react-router-dom</a> - this navigational component is used when a React app has more than one view</li>
+	<li><a href="https://github.com/gauravchl/react-simple-sidenav" target="_blank">react-simple-sidenav</a> - component for side navigation</li>
+	<li><a href="https://github.com/akiran/react-slick" target="_blank">react-slick</a> - carousel component</li>
+	<li><a href="https://github.com/danawoodman/react-fontawesome" target="_blank">react-fontawesome</a> - component for the font-awesome icon library</li>
+	<li><a href="https://github.com/axios/axios" target="_blank">axios</a> - library that allows us to make async requests just like AJAX</li>
+	<li><a href="https://reactcommunity.org/react-transition-group/" target="_blank">react-transition-group</a> - an easy way to add transitions to our components</li>
+</ul>
+
+<h3>Install JSON Server</h3>
+
+	<p><a href="https://github.com/typicode/json-server">JSON Server</a> is kind of a fake REST API which allows us to make requests to local host and get some content.</p>
+
+		<ol>
+			<li>In the terminal install JSON server globally: <code class="language-bash">npm install -g json-server</code></li>
+			<li>In the root directory of your project create a file called <em>db.json</em> and add some data to it. This will be used as our database. In my <em>db.json</em> file I have 3 different data collections which include <code>articles</code>, <code>videos</code> and <code>brands</code></li>
+			<li>Back in the terminal start the server <code class="language-bash">npm start</code></li>
+			<li>Next start the JSON server. Open a new terminal window and type: <code class="language-bash">json-server --watch db.json --port 3004
+			</code>. In my case this command has created the following links on port 3004:
+			<pre>
+			<code class="language-bash">
+			Resources
+			http://localhost:3004/articles
+			http://localhost:3004/videos
+			http://localhost:3004/brands
+			
+			Home
+			http://localhost:3004  
+			</code>
+			</pre>
+			Note: instead of running <code class="language-bash">json-server --watch db.json --port 3004</code> each time you want to start the JSON server you can instead add the following to the scripts section of your <em>package.json</em> file: <code class="language-json">"dev-serv": "json-server --watch db.json --port 3004",</code>. Now all you need to type to run the JSON server in the terminal is <code class="language-bash">npm run dev-serv</code>.
+			</li>
+		</ol>
+
+<h3>Enable css modules</h3>
+<p>CSS Modules allow each React component to have it's own locally scoped CSS file which makes the development process much more manageable.</p>
+
+		<ol>
+			<li>If the dev server is running go to the terminal and press Ctrl+C to stop the server</li>
+			<li>Next run <code class="language-bash">npm run eject</code></li>
+			<li>Next, start the development server. Type <code class="language-bash">npm start</code></li>
+			<li>In your project folder open <em>config/webpack.config.dev.js</em> and find the line: <code class="language-json">importLoaders: 1,</code>. Select this line and add the following code:
+			<pre>
+			<code class="language-json">
+			modules:true,
+			importLoaders: 1,
+			localIdentName: '[name]__[local]__[hash:base64:5]'
+			</code>
+			</pre>
+			</li>
+			<li>Save and close the file</li>
+			<li>Open <em>config/webpack.config.prod.js</em> and find the following the 3 lines of code:
+			<pre>
+			<code class="language-json">
+			importLoaders: 1,
+			minimize: true,
+			sourceMap: shouldUseSourceMap,
+			</code>
+			</pre>
+			<li>Edit the above block of code so that it matches the following:</li>
+			<pre>
+			<code class="language-json">
+			importLoaders: 1,
+			modules:true,
+			minimize: true,
+			sourceMap: shouldUseSourceMap,
+			localIdentName: '[name]__[local]__[hash:base64:5]'
+			</code>
+			</pre>
+			<li>Save and close the file</li>
+			<li>Whenever we edit any config files we need to restart the server so we can see changes. You can stop the server with Ctrl+C then start it again by typing <code class="language-bash">npm start</code></li>
+			</ol>
+	</li>
+
+</ol>
+
+<!-- PUBLIC FOLDER FILES -->
+
+<h3>Manage the <em>public</em> folder</h3>
+<ol>
+	<li>Delete all files in the <em>public</em> folder except for the <em>index.html</em> file</li>
+	<li>Create a new folder called <em>images</em>. This folder will hold all the images used on the site</li>
+	<li>Open the <em>public/index.html</em> file and paste the following inside the <code>head</code> section:
+
+		<pre>
+		<code class="language-markup">
+		&lt;link href=&quot;https://fonts.googleapis.com/css?family=Raleway:300,500,700&quot; rel=&quot;stylesheet&quot;&gt; 
+		&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css&quot;&gt;
+		&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; charset=&quot;UTF-8&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css&quot; /&gt;
+		&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css&quot; /&gt;
+		</code>
+		</pre>
+
+		<p>The Font Awesome cdn link can be fount at <a href="https://cdnjs.com/libraries/font-awesome" target="_blank">https://cdnjs.com/libraries/font-awesome</a> and the Slick cdn links can be found at <a href="https://github.com/akiran/react-slick" target="_blank">https://github.com/akiran/react-slick</a></p>
+	</li>
+</ol>
+
+
+<!-- SRC FOLDER FILES -->
+<h3>Manage the <em>src</em> folder</h3>
+
+<ol>
+	<li>Delete all files in the <em>src</em> folder except for the <em>index.js</em> file</li>
+	<li>Create 2 new files. Call them <em>routes.js</em> and <em>config.js</em></li>
+	<li>Create 2 new folders. Call them <em>components</em> and <em>hoc</em></li>
+	<li>Open the <em>src/index.js</em> file. Delete the existing content and add the following:
+		<pre>
+		<code class="language-jsx">
+		import React from 'react';
+		import ReactDOM from 'react-dom';
+		import { BrowserRouter } from 'react-router-dom';
+		
+		import Routes from './routes'
+		
+		const App = () =&gt; {
+			return(
+				&lt;BrowserRouter&gt;
+					&lt;Routes/&gt;     
+				&lt;/BrowserRouter&gt;
+			)
+		}
+		
+		ReactDOM.render(&lt;App /&gt;, document.getElementById('root'));
+		</code>
+		</pre>
+	</li>
+
+	<li>Open the <em>src/routes.js</em> file and add the following code:
+		<pre>
+		<code class="language-jsx">
+		import React, { Component } from 'react';
+		import { Route, Switch } from 'react-router-dom';
+
+		import Home from './components/Home/home';
+		import Layout from './hoc/Layout/layout';
+
+		import NewsArticle from './components/Articles/News/Post/index';
+		import VideoArticle from './components/Articles/Videos/Video/index';
+		import NewsMain from './components/Articles/News/Main/index';
+		import VideosMain from './components/Articles/Videos/Main/index';
+
+		class Routes extends Component {
+			render(){
+				return(
+					&lt;Layout&gt;
+						&lt;Switch&gt;
+							&lt;Route path=&quot;/&quot; exact component={Home}/&gt;
+							&lt;Route path=&quot;/news&quot; exact component={NewsMain}/&gt;
+							&lt;Route path=&quot;/articles/:id&quot; exact component={NewsArticle}/&gt;
+							&lt;Route path=&quot;/videos/:id&quot; exact component={VideoArticle}/&gt;
+							&lt;Route path=&quot;/videos&quot; exact component={VideosMain}/&gt;
+						&lt;/Switch&gt;
+					&lt;/Layout&gt;
+					
+				)
+			}
+		}
+
+		export default Routes;
+		</code>
+		</pre>
+	</li>
+
+	<li>
+		Open the <em>src/config.js</em> file and add the following:
+		<pre>
+		<code class="language-javascript">
+		const CURRENT_YEAR = (new Date()).getFullYear()
+		const URL = 'http://localhost:3004';
+		
+		export {
+			CURRENT_YEAR,
+			URL
+		}
+		</code>
+		</pre>
+	</li>
+
+</ol>
+
+
+<!-- HIGH ORDER COMPONENTS -->
+<h3>Manage the <em>src/hoc</em> folder</h3>
+<ol>
+	<li>Inside the <em>src/hoc</em> folder create a new folder called <em>Layout</em></li>
+	<li>Inside the <em>src/hoc/Layout</em> folder create 2 files. Call them <em>layout.js</em> and <em>layout.css</em></li>
+	<li>Open the <em>src/hoc/Layout/layout.js</em> file and add the following code:
+		<pre>
+			<code class="language-jsx">
+			import React, { Component } from 'react';
+			import './layout.css'
+			
+			import Header from '../../components/Header/header';
+			import Footer from '../../components/Footer/footer';
+			
+			class Layout extends Component {
+			
+				state = {
+					showNav:false
+				}
+			
+				toggleSidenav = (action) =&gt;{
+					this.setState({
+						showNav:action
+					})
+				}
+			
+				render(){
+					return(
+						&lt;div&gt;
+							&lt;Header
+								showNav={this.state.showNav}
+								onHideNav={() =&gt; this.toggleSidenav(false)}
+								onOpenNav={() =&gt; this.toggleSidenav(true)}
+							/&gt;
+							{this.props.children}
+							&lt;Footer/&gt;
+						&lt;/div&gt;            
+					)
+				}
+			}
+			
+			export default Layout;
+			</code>
+			</pre>
+	</li>
+	<li>Open the <em>src/hoc/Layout/layout.css</em> file and add the following code:
+		<pre>
+			<code class="language-css">
+			body {
+				margin:0;
+				padding:0;
+				background: #ececec;
+				font-family: 'Raleway', sans-serif;
+			}
+			
+			a {
+				text-decoration: none;
+			}
+			</code>
+			</pre>
+	</li>
+</ol>
+
+
+<!-- COMPONENTS -->
+<h3>Manage the <em>src/components</em> folder</h3>
+<p>Inside the <em>src/components</em> folder create the following folders:</p>
+<ul>
+<li><em>Home</em></li>
+<li><em>Header</em> - inside this folder create 1 new folder called <em>SideNav</em></li>
+<li><em>Footer</em></li>
+<li><em>widgets</em> - inside this folder create 5 new folders. Call them <em>NewsSlider</em>, <em>NewsList</em>, <em>Buttons</em>, <em>CardInfo</em> and <em>VideosList</em></li>
+<li><em>Articles</em> - inside this folder create 3 new folders. Call them <em>News</em>, <em>Videos</em> and <em>Elements</em></li>
+<li><em>Articles/News</em> - inside this folder create 2 new folders. Call them <em>Main</em> and <em>Post</em></li>
+<li><em>Articles/Videos</em> - inside this folder create 2 new folders. Call them <em>Main</em> and <em>Video</em></li>
+</ul>
+
+
+<ol>
+	<li>Inside the <em>src/components/Home</em> folder create a file called <em>home.js</em>. Open the file and add the following code:
+		<pre>
+			<code class="language-jsx">
+			import React from 'react';
+			
+			import NewsSlider from '../widgets/NewsSlider/slider';
+			import NewsList from '../widgets/NewsList/newsList';
+			import VideosList from '../widgets/VideosList/videosList';
+			
+			const Home = () =&gt;{
+				return (
+					&lt;div&gt;
+						&lt;NewsSlider
+							type=&quot;featured&quot;
+							start={0}
+							amount={3}
+							settings=&#123;{
+								dots:false
+							}}
+						/&gt;
+						&lt;NewsList
+							type=&quot;card&quot;
+							loadmore={true}
+							start={3}
+							amount={3}
+						/&gt;
+						&lt;VideosList
+							type=&quot;card&quot;
+							title={true}
+							loadmore={true}
+							start={0}
+							amount={3}
+						/&gt;
+					&lt;/div&gt;
+				)
+			}
+			
+			export default Home;
+			</code>
+			</pre>
+	</li>
+
+	<li>Inside the <em>src/components/Header</em> folder create a file called <em>header.js</em>. Open the file and add the following code:
+
+		<pre>
+			<code class="language-jsx">
+			import React from 'react';
+			import style from './header.css';
+			import { Link } from 'react-router-dom';
+			
+			import FontAwesome from 'react-fontawesome';
+			import SideNav from './SideNav/sideNav';
+			
+			const Header = (props) =&gt;{
+			
+				const navBars = () =&gt; (
+					&lt;div className={style.bars}&gt;
+						&lt;FontAwesome name=&quot;bars&quot;
+							onClick={props.onOpenNav}
+							style=&#123;{
+								color:'#dfdfdf',
+								padding:'10px',
+								cursor:'pointer'
+							}}
+						/&gt;
+					&lt;/div&gt;
+				)
+			
+				const logo = () =&gt; (
+					&lt;Link to=&quot;/&quot; className={style.logo}&gt;
+						&lt;img alt=&quot;Essenci logo&quot; src=&quot;/images/essenci_logo.png&quot;/&gt;
+					&lt;/Link&gt;
+				)
+			
+				return (
+					&lt;header className={style.header}&gt;
+						&lt;SideNav {...props}/&gt;
+						&lt;div className={style.headerOpt}&gt;
+							{navBars()}
+							{logo()}
+						&lt;/div&gt;
+					&lt;/header&gt;
+				)
+			}
+			
+			export default Header;
+			</code>
+			</pre>
+	</li>
+
+<li>Inside the <em>src/components/Header</em> folder create a file called <em>header.css</em>. Open the file and add the following code:
+
+	<pre>
+		<code class="language-css">
+		.header {
+			background: #333333;
+			border-bottom: 1px solid #000000;
+		}
+		.headerOpt {
+			display: flex;
+		}
+		
+		.logo {
+			flex-grow: 1;
+			padding-top: 8px;
+		}
+		
+		.logo img {
+			width: 120px;
+		}
+		</code>
+	</pre>
+
+</li>
+
+<li>Inside the <em>src/components/Header/SideNav</em> folder create a file called <em>sideNav.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React from 'react';
+		import SideNav from 'react-simple-sidenav';
+		
+		import SideNavItems from './sideNav_items'
+		
+		const SideNavigation = (props) =&gt; {
+			return (
+				&lt;div&gt;
+					&lt;SideNav 
+						showNav={props.showNav}
+						onHideNav={props.onHideNav}
+						navStyle=&#123;{
+							background:'#333333',
+							maxWidth:'220px'
+						}&#125;
+					&gt;
+						&lt;SideNavItems/&gt;
+					&lt;/SideNav&gt;
+				&lt;/div&gt;
+			)
+		}
+		
+		export default SideNavigation;
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/Header/SideNav</em> folder create a file called <em>sideNav.css</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-css">
+		.option {
+			font-weight: 300;
+			font-size: 12px;
+			color:#bababa;
+			padding:10px;
+			border-top: 1px solid #404040;
+		}
+		
+		.option a {
+			color: inherit;
+			text-decoration:none;
+		}
+		
+		.option span {
+			color:white;
+			margin-right:10px;
+		}
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/Header/SideNav</em> folder create a file called <em>sideNav_items.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React from 'react';
+		import { Link } from 'react-router-dom'
+		
+		import FontAwesome from 'react-fontawesome';
+		import style from './sideNav.css'
+		
+		const SideNavItems = () =&gt; {
+		
+			const items = [
+				{
+					type: style.option,
+					icon:'home',
+					text: 'Home',
+					link: '/'
+				},
+				{
+					type: style.option,
+					icon:'file-text-o',
+					text: 'News',
+					link: '/news'
+				},
+				{
+					type: style.option,
+					icon:'play',
+					text: 'Videos',
+					link: '/videos'
+				}
+			]
+		
+			const showItems = () =&gt; {
+				return items.map( (item,i) =&gt;{
+					return(
+						&lt;div key={i} className={item.type}&gt;
+							&lt;Link to={item.link}&gt;
+								&lt;FontAwesome name={item.icon}/&gt;
+								{item.text}
+							&lt;/Link&gt;
+						&lt;/div&gt;
+					)
+				} )
+			}
+		
+			return(
+				&lt;div&gt;
+					{showItems()}
+				&lt;/div&gt;
+			)
+		
+		}
+		
+		export default SideNavItems;
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/Footer</em> folder create a file called <em>footer.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React from 'react';
+		import style from './footer.css';
+		import { Link } from 'react-router-dom';
+		
+		import { CURRENT_YEAR } from '../../config';
+		
+		const footer = () =&gt; (
+				&lt;div className={style.footer}&gt;
+					&lt;Link to=&quot;/&quot; className={style.logo}&gt;
+					&lt;img alt=&quot;Essenci logo&quot; src=&quot;/images/essenci_logo.png&quot;/&gt;
+					&lt;/Link&gt;
+					&lt;div className={style.right}&gt;
+						&amp;copy; Essenci {CURRENT_YEAR}
+					&lt;/div&gt;
+				&lt;/div&gt;
+		)
+		
+		export default footer;
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/Footer</em> folder create a file called <em>footer.css</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-css">
+		.footer {
+			margin-top: 20px;
+			background: #333333;
+			border-top: 1px solid #000000;
+			display:flex;
+			justify-content: center;
+			align-items: center;
+		}
+		
+		.logo img {
+			height:20px;
+			padding:10px;
+		}
+		
+		.right {
+			flex-grow: 1;
+			color: #878787;
+			font-size: 12px;
+		}
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/widgets/NewsSlider</em> folder create a file called <em>slider.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React, { Component } from 'react';
+		import axios from 'axios';
+		
+		import SliderTemplates from './slider_templates';
+		import { URL } from '../../../config';
+		
+		class NewsSlider extends Component {
+		
+			state = {
+				news:[]
+			}
+		
+			componentWillMount(){
+				axios.get(`${URL}/articles?_start=${this.props.start}&amp;_end=${this.props.amount}`)
+				.then( response =&gt; {
+					this.setState({
+						news:response.data
+					})
+				})
+			}
+		
+			render(){
+				return(
+					&lt;SliderTemplates data={this.state.news} type={this.props.type} settings={this.props.settings} /&gt;
+				)
+			}
+		
+		}
+		
+		export default NewsSlider;
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/widgets/NewsSlider</em> folder create a file called <em>slider.css</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-css">
+		.featured_item {
+			position: relative;
+		}
+		
+		.featured_item a {
+			position:absolute;
+			width:100%;
+			bottom:0;
+			text-decoration: none;
+			right:0;
+		}
+		
+		.featured_image {
+			height: 330px;
+			background-size: cover !important;
+			background-repeat: no-repeat !important;
+		}
+		
+		.featured_caption {
+			color:#ffffff;
+			top:0px;
+			width:100%;
+			padding:20px;
+			font-weight: 600;
+			font-size:28px;
+			box-sizing: border-box;
+		}
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/widgets/NewsSlider</em> folder create a file called <em>slider_templates.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React from 'react';
+		import { Link } from 'react-router-dom';
+		
+		import Slick from 'react-slick';
+		import styles from './slider.css';
+		
+		const SliderTemplates = (props) =&gt; {
+		
+			let template = null;
+			
+			const settings = {
+				dots:true,
+				infinite: true,
+				arrows: false,
+				speed: 500,
+				slidesToShow:1,
+				slidesToScroll:1,
+				...props.settings
+			}
+		
+			switch(props.type){
+				case ('featured'):
+					template = props.data.map( (item,i) =&gt;{
+						return(
+							&lt;div key={i}&gt;
+								&lt;div className={styles.featured_item}&gt;
+									&lt;div className={styles.featured_image}
+										style=&#123;{
+											background:`url(../images/articles/${item.image})`
+										}}&gt;&lt;/div&gt;
+										&lt;Link to={`/articles/${item.id}`}&gt;
+										&lt;div className={styles.featured_caption}&gt;
+											{item.title}
+										&lt;/div&gt;
+										&lt;/Link&gt;
+								&lt;/div&gt;
+							&lt;/div&gt;
+						)
+					})
+		
+					break;
+				default:
+					template = null;
+			}
+		
+			return(
+				&lt;Slick {...settings} &gt;
+					{template}
+				&lt;/Slick&gt;
+			)
+		
+		}
+		
+		export default SliderTemplates;
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/widgets/NewsList</em> folder create a file called <em>newsList.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React, { Component } from 'react';
+		import {CSSTransition , TransitionGroup } from 'react-transition-group';
+		import { Link } from 'react-router-dom';
+		import axios from 'axios';
+		
+		import { URL } from '../../../config';
+		import styles from './newsList.css';
+		import Button from '../Buttons/buttons';
+		import CardInfo from '../../widgets/CardInfo/cardInfo';
+		
+		class NewsList extends Component {
+		
+			state = {
+				brands:[],
+				items:[],
+				start:this.props.start,
+				end:this.props.start + this.props.amount,
+				amount:this.props.amount
+			}
+		
+			componentWillMount(){
+				this.request(this.state.start,this.state.end)
+			}
+		
+			request = (start,end) =&gt; {
+				if(this.state.brands.length &lt; 1){
+					axios.get(`${URL}/brands`)
+					.then( response  =&gt; {
+						this.setState({
+							brands:response.data
+						})
+					})
+				}
+		
+				axios.get(`${URL}/articles?_start=${start}&amp;_end=${end}`)
+				.then( response =&gt; {
+					this.setState({
+						items:[...this.state.items,...response.data],
+						start,
+						end
+					})
+				})
+			}
+		
+			loadMore = () =&gt; {
+				let end = this.state.end + this.state.amount;
+				this.request(this.state.end,end)
+			}
+		
+			renderNews = (type) =&gt; {
+				let template = null;
+		
+				switch(type){
+					case('card'):
+						template = this.state.items.map((item,i) =&gt; (
+							&lt;CSSTransition
+								classNames=&#123;{
+									enter:styles.newsList_wrapper,
+									enterActive:styles.newsList_wrapper_enter
+								}}
+								timeout={500}
+								key={i}
+							&gt;
+								&lt;div&gt;
+									&lt;div className={styles.newslist_item}&gt;
+										&lt;Link to={`/articles/${item.id}`}&gt;
+											&lt;CardInfo brands={this.state.brands} brand={item.brand} date={item.date}/&gt;
+											&lt;h2&gt;{item.title}&lt;/h2&gt;
+										&lt;/Link&gt;
+									&lt;/div&gt;
+								&lt;/div&gt;
+							&lt;/CSSTransition&gt;
+							
+						))
+						break;
+					case('cardMain'):
+						template = this.state.items.map((item,i) =&gt; (
+							&lt;CSSTransition
+								classNames=&#123;{
+									enter:styles.newsList_wrapper,
+									enterActive:styles.newsList_wrapper_enter
+								}}
+								timeout={500}
+								key={i}
+							&gt;
+								&lt;Link to={`/articles/${item.id}`}&gt;
+									&lt;div className={styles.flex_wrapper}&gt;
+										&lt;div className={styles.left} 
+											style=&#123;{
+												background:`url('/images/articles/${item.image}')`
+											}}&gt;
+											&lt;div&gt;&lt;/div&gt;
+										&lt;/div&gt;
+										&lt;div className={styles.right}&gt;
+											&lt;CardInfo brands={this.state.brands} brand={item.brand} date={item.date}/&gt;
+											&lt;h2&gt;{item.title}&lt;/h2&gt;
+										&lt;/div&gt;
+									&lt;/div&gt;
+								&lt;/Link&gt;
+							&lt;/CSSTransition&gt;
+						))
+						break;
+					default:
+						template = null;
+				}
+		
+				return template;
+			}
+		
+			render(){
+				return(
+					&lt;div&gt;
+						&lt;TransitionGroup
+							component=&quot;div&quot;
+							className=&quot;list&quot;
+						&gt;
+							{ this.renderNews( this.props.type )}
+						&lt;/TransitionGroup&gt;
+						&lt;Button
+							type=&quot;loadmore&quot;
+							loadMore={()=&gt;this.loadMore()}
+							cta=&quot;Load More News&quot;
+						/&gt;
+					&lt;/div&gt;
+				)
+			}
+		
+		}
+		
+		export default NewsList;
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/widgets/NewsList</em> folder create a file called <em>newsList.css</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-css">
+		.newslist_item {
+			border: 1px solid #f2f2f2;
+			background: #fff;
+			margin-top:0px;
+			padding:8px 5px 0 5px;
+		}
+		
+		.newslist_item h2 {
+			font-size: 13px;
+			line-height: 21px;
+			margin:5px 0;
+			color:#525252;
+		}
+		
+		.newslist_item a {
+			text-decoration:none;
+		}
+		
+		.newsList_wrapper {
+			box-sizing: border-box;
+			opacity: 0;
+			transform: translateX(-100%);
+			transition: all .5s ease-in;
+		}
+		
+		.newsList_wrapper_enter {
+			opacity:1;
+			transform: translateX(0%);
+		}
+		
+		.flex_wrapper {
+			display: flex;
+			border-bottom: 2px solid #d5d5d5;
+			backround: #fff;
+		}
+		
+		.left {
+			background-size: cover !important;
+		}
+		
+		.left div {
+			width: 90px;
+			height: 90px;
+			background-size: 40px !important;
+			background-repeat: no-repeat !important;
+			background-position: center center !important;
+		}
+		
+		.right {
+			flex-grow: 1;
+			padding: 10px;
+		}
+		
+		.flex_wrapper h2 {
+			font-size: 12px;
+			color:#525252;
+		}
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/widgets/Buttons</em> folder create a file called <em>buttons.js</em>. Open the file and add the following code:
+<pre>
+<code class="language-jsx">
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+import styles from './buttons.css';
+
+const buttons = (props) =&gt; {
+let template = null;
+
+switch(props.type){
+	case 'loadmore':
+		template = (
+			&lt;div className={styles.orange_btn}
+				onClick={props.loadMore}
+			&gt;
+				{props.cta}
+			&lt;/div&gt;
+		);
+		break;
+	case 'linkTo':
+		template = (
+			&lt;Link to={props.linkTo}
+				className={styles.orange_btn}&gt;
+				{props.cta}
+			&lt;/Link&gt;	
+		)
+		break;
+	default:
+		template = null
+}
+return template;
+}
+
+export default buttons;	
+</code>
+</pre>
+</li>
+
+<li>Inside the <em>src/components/widgets/Buttons</em> folder create a file called <em>buttons.css</em>. Open the file and add the following code:
+<pre>
+<code class="language-css">
+.orange_btn {
+	text-align: center;
+	background: #FFA300;
+	font-weight: 700;
+	display:block;
+	color:#282828;
+	padding:9px;
+	cursor:pointer;
+	font-size:15px;
+
+	text-decoration: none;
+}
+</code>
+</pre>
+</li>
+
+<li>Inside the <em>src/components/widgets/CardInfo</em> folder create a file called <em>cardInfo.js</em>. Open the file and add the following code:
+<pre>
+	<code class="language-jsx">
+	import React from 'react';
+	import FontAwesome from 'react-fontawesome';
+	
+	import styles from './cardInfo.css';
+	
+	const CardInfo = (props) =&gt;{
+	
+		const brandName = (brands,brand) =&gt;{
+			let data = brands.find((item)=&gt;{
+				return item.id === brand
+			});
+			if(data){
+				return data.name
+			}
+		}
+	
+		return(
+			&lt;div className={styles.cardNfo}&gt;
+				&lt;span className={styles.brandName}&gt;
+					{brandName(props.brands,props.brand)}
+				&lt;/span&gt;
+				&lt;span className={styles.date}&gt;
+					&lt;FontAwesome name=&quot;clock-o&quot;/&gt;
+					{props.date}
+				&lt;/span&gt;
+			&lt;/div&gt;
+		)
+	}
+	
+	export default CardInfo;
+	</code>
+	</pre>
+</li>
+
+<li>Inside the <em>src/components/widgets/CardInfo</em> folder create a file called <em>cardInfo.css</em>. Open the file and add the following code:
+<pre>
+	<code class="language-css">
+	.cardNfo {
+		font-size: 11px;
+	}
+	
+	.cardNfo i {
+		margin-right: 5px;
+	}
+	
+	.brandName {
+		margin-right: 7px;
+		background: #d1d1d1;
+		color: #fff;
+		padding: 2px 5px;
+	}
+	
+	.date {
+		color:#FFA300; 
+	}
+	</code>
+</pre>
+</li>
+
+<li>Inside the <em>src/components/widgets/VideosList</em> folder create a file called <em>videosList.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React, { Component } from 'react';
+		import styles from './videosList.css';
+		import axios from 'axios';
+		
+		import { URL } from '../../../config';
+		import Button from '../Buttons/buttons';
+		import VideosListTemplate from './videosListTemplate';
+		
+		class VideosList extends Component {
+		
+			state = {
+				brands:[],
+				videos:[], 
+				start: this.props.start,
+				end: this.props.start + this.props.amount,
+				amount: this.props.amount
+			}
+		
+			componentWillMount() {
+				this.request(this.state.start, this.state.end)
+			}
+		
+			request = (start,end) =&gt; {
+				if(this.state.brands.length &lt; 1){
+					axios.get(`${URL}/brands`)
+					.then( response =&gt; {
+						this.setState({
+							brands:response.data
+						})
+					})
+				}
+		
+				axios.get(`${URL}/videos?_start=${start}&amp;_end=${end}`)
+				.then( response =&gt; {
+					this.setState({
+						videos:[...this.state.videos,...response.data],
+						start,
+						end
+					})
+				})
+			}
+		
+			renderVideos = () =&gt; {
+				let template = null;
+		
+				switch(this.props.type){
+					case('card'):
+						template = &lt;VideosListTemplate data={this.state.videos} brands={this.state.brands}/&gt;
+						break;
+					default:
+						template = null
+				}
+				return template;
+			}
+		
+			loadMore = () =&gt; {
+				let end = this.state.end + this.state.amount;
+				this.request(this.state.end, end)
+			}
+		
+			renderButton = () =&gt; {
+				return this.props.loadmore ? 
+					&lt;Button
+						type=&quot;loadmore&quot;
+						loadMore={()=&gt; this.loadMore()}
+						cta=&quot;Load More Videos&quot;
+					/&gt;
+					: 
+					&lt;Button type=&quot;linkTo&quot; cta=&quot;More videos&quot; linkTo=&quot;/videos&quot;/&gt;
+			}
+		
+			renderTitle = () =&gt; {
+				return this.props.title ? 
+					&lt;h3&gt;&lt;strong&gt;Product&lt;/strong&gt; Videos&lt;/h3&gt;
+				: null
+			}
+		
+			render(){
+				return(
+					&lt;div className={styles.videoList_wrapper}&gt;
+						{ this.renderTitle() }
+						{ this.renderVideos() }
+						{ this.renderButton() }
+					&lt;/div&gt;
+				)
+			}
+		
+		}
+		
+		export default VideosList;
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/widgets/VideosList</em> folder create a file called <em>videosListTemplate.js</em>. Open the file and add the following code:
+<pre>
+	<code class="language-jsx">
+	import React from 'react';
+	import styles from './videosList.css';
+	
+	import { Link } from 'react-router-dom';
+	import CardInfo from '../CardInfo/cardInfo';
+	
+	const VideosListTemplate = (props) =&gt; {
+		return props.data.map( (item,i) =&gt; (
+			&lt;Link to={`/videos/${item.id}`} key={i}&gt;
+				&lt;div className={styles.videoListItem_wrapper}&gt;
+					&lt;div className={styles.left}
+						style=&#123;{
+							background:`url(/images/videos/${item.image})`
+						}}
+					&gt;
+						&lt;div&gt;&lt;/div&gt;
+					&lt;/div&gt;
+					&lt;div className={styles.right}&gt;
+						&lt;CardInfo brands={props.brands} brand={item.brand} date={item.date}/&gt;
+						&lt;h2&gt;{item.title}&lt;/h2&gt;
+					&lt;/div&gt;
+	
+				&lt;/div&gt;
+			&lt;/Link&gt;
+		))
+	}
+	
+	export default VideosListTemplate;
+	</code>
+</pre>
+
+</li>
+
+<li>Inside the <em>src/components/widgets/VideosList</em> folder create a file called <em>videosList.css</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-css">
+		.videoList_wrapper h3 {
+			text-align: center;
+			margin:20px;
+			color: #353535;
+			font-weight: 300;
+			font-size: 21px;
+		}
+		
+		.videoListItem_wrapper {
+			display: flex;
+			border-bottom: 2px solid #d5d5d5;
+			background: #fff;
+		}
+		
+		.videoListItem_wrapper h2 {
+			font-size: 13px;
+			color: #525252;
+		}
+		
+		.left {
+			background-size: cover !important;
+		}
+		
+		.left div {
+			width: 90px;
+			height: 90px;
+			background-size: 40px !important;
+			background-repeat: no-repeat !important;
+			background-position: center center !important;
+			background: url('/images/play.png');
+		}
+		
+		.right {
+			flex-grow: 1;
+			padding: 10px;
+		}	
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/Articles</em> folder create a file called <em>articles.css</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-css">
+		.articleBrandHeader {
+			border:1px solid #c5c5c5;
+			border-bottom: 0px;
+			background: #fff;
+			margin: 5px 5px 0 5px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		
+		.left {
+			width: 57px;
+			height: 50px;
+			background-size: 65% !important;
+			background-repeat: no-repeat !important;
+			background-position: center center !important;
+		}
+		
+		.right {
+			flex-grow: 1;
+			padding-left: 10px;
+			font-size: 15px;
+			font-weight: 300;
+		}
+		
+		.articlePostData {
+			border: 1px solid #c5c5c5;
+			border-bottom: 0px;
+			background: #fff;
+			margin: 0px 5px 0 5px;
+			padding: 10px;
+			font-size: 13px;
+			font-weight: 300;
+		}
+		
+		.articlePostData span {
+			font-weight: 500;
+		}
+		
+		.articleBody {
+			background: #fff;
+			margin: 0 5px;
+			border: 1px solid #c5c5c5;
+			padding: 10px;
+		}
+		
+		.articleBody h1 {
+			font-size: 25px;
+			font-weight: 500;
+			color: #4d4d4d;
+			margin: 15px 0;
+		}
+		
+		.articleImage {
+			background-size: cover !important;
+			width:100%;
+			height:200px;
+			background-position: center center !important;
+			background-repeat: none !important;
+		}
+		
+		.articleText {
+			font-weight: 300;
+			color: #666;
+			line-height: 23px;
+			margin: 15px 0;
+		}
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/Articles/News/Post</em> folder create a file called <em>index.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React, { Component } from 'react';
+		import axios from 'axios';
+		import { URL } from '../../../../config';
+		
+		import styles from '../../articles.css';
+		import Header from './header';
+		
+		class NewsArticles extends Component {
+		
+			state = {
+				article:[],
+				brand:[]
+			}
+		
+			componentWillMount(){
+				axios.get(`${URL}/articles?id=${this.props.match.params.id}`)
+				.then( response =&gt; {
+					let article = response.data[0];
+		
+					axios.get(`${URL}/brands?id=${article.brand}`)
+					.then( response =&gt; {
+						this.setState({
+							article,
+							brand:response.data
+						})
+					})
+		
+				})
+		
+			}
+		
+			render(){
+				const article = this.state.article;
+				const brand = this.state.brand;
+		
+				return(
+					&lt;div className={styles.articleWrapper}&gt;
+						&lt;Header
+							brandData={brand[0]}
+							date={article.date}
+							author={article.author}
+						/&gt;
+						&lt;div className={styles.articleBody}&gt;
+							&lt;h1&gt;{article.title}&lt;/h1&gt;
+							&lt;div className={styles.articleImage}
+								style=&#123;{
+									background:`url('/images/articles/${article.image}')`
+								}}
+							&gt;&lt;/div&gt;
+							&lt;div className={styles.articleText}&gt;
+								{article.body}
+							&lt;/div&gt;
+						&lt;/div&gt;
+					&lt;/div&gt;
+				)
+			}
+		}
+		
+		export default NewsArticles;
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/Articles/News/Post</em> folder create a file called <em>header.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React from 'react';
+		
+		import BrandNfo from '../../Elements/brandNfo';
+		import PostData from '../../Elements/postData';
+		
+		const header = (props) =&gt; {
+		
+		const brandNfo = (brand) =&gt; {
+			return brand ? (
+				&lt;BrandNfo brand={brand}/&gt;
+			):null;
+		}
+		
+		const postData = ( date, author ) =&gt; (
+			&lt;PostData data=&#123;{date,author}}/&gt;
+		)
+		
+		return(
+			&lt;div&gt;
+				{brandNfo(props.brandData)}
+				{postData(props.date, props.author)}
+			&lt;/div&gt;
+		)
+		}
+		
+		export default header;
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/Articles/Elements</em> folder create a file called <em>brandNfo.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React from 'react';
+		import styles from '../articles.css';
+		
+		const brandNfo = (props) =&gt;(
+			&lt;div className={styles.articleBrandHeader}&gt;
+				&lt;div className={styles.left}
+					style=&#123;{
+						background:`url('/images/brands/${props.brand.logo}')`
+					}}
+				&gt;
+				&lt;/div&gt;
+				&lt;div className={styles.right}&gt;
+					&lt;div&gt;
+						&lt;strong&gt;
+							{props.brand.name}
+						&lt;/strong&gt;
+					&lt;/div&gt;
+					&lt;div&gt;
+						&lt;span&gt;{props.brand.country}&lt;/span&gt;  
+					&lt;/div&gt;
+				&lt;/div&gt;    
+			&lt;/div&gt;
+		)
+		
+		export default brandNfo;
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/Articles/Elements</em> folder create a file called <em>postData.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React from 'react';
+		import styles from '../articles.css';
+		
+		const postData = (props) =&gt; (
+			&lt;div className={styles.articlePostData}&gt;
+				&lt;div&gt;
+					Date:
+					&lt;span&gt;{props.data.date}&lt;/span&gt;
+				&lt;/div&gt;
+				&lt;div&gt;
+					Author:
+					&lt;span&gt;{props.data.author}&lt;/span&gt;
+				&lt;/div&gt;
+			&lt;/div&gt;
+		)
+		
+		export default postData;
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/Articles/Videos/Video</em> folder create a file called <em>index.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React, { Component } from 'react';
+		import axios from 'axios';
+		import { URL } from '../../../../config';
+		
+		import styles from '../../articles.css';
+		import Header from './header';
+		
+		class VideoArticle extends Component {
+		
+			state = {
+				article:[],
+				brand:[]
+			}
+		
+			componentWillMount(){
+				axios.get(`${URL}/videos?id=${this.props.match.params.id}`)
+				.then( response =&gt; {
+					let article = response.data[0];
+		
+					axios.get(`${URL}/brands?id=${article.brand}`)
+					.then( response =&gt; {
+						this.setState({
+							article,
+							brand:response.data
+						});
+					})
+				})
+			}
+		
+			render(){
+				const article = this.state.article;
+				const brand = this.state.brand;
+		
+				return(
+					&lt;div&gt;
+						&lt;Header brandData={brand[0]}/&gt;
+						&lt;div className={styles.videoWrapper}&gt;
+						&lt;h1&gt;{article.title}&lt;/h1&gt;
+						&lt;iframe 
+							title=&quot;videoplayer&quot;
+							width=&quot;100%&quot;
+							height=&quot;300px&quot;
+							src={`https://www.youtube.com/embed/${article.url}`}
+						&gt;
+						&lt;/iframe&gt;
+						&lt;/div&gt;
+					&lt;/div&gt;
+				)
+			}
+		}
+		
+		export default VideoArticle;
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/Articles/Videos/Video</em> folder create a file called <em>header.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React from 'react';
+		import BrandNfo from '../../Elements/brandNfo';
+		
+		const header = (props) =&gt; {
+		
+			const brandNfo = (brand) =&gt;{
+				return brand ? (
+					&lt;BrandNfo brand={brand}/&gt;
+				):null;
+			}
+		
+			return(
+				&lt;div&gt;
+					{brandNfo(props.brandData)}
+				&lt;/div&gt;
+			)
+		}
+		
+		export default header;
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/Articles/News/Main</em> folder create a file called <em>index.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React from 'react';
+		
+		import NewsSlider from '../../../widgets/NewsSlider/slider';
+		import NewsList from '../../../widgets/NewsList/newsList';
+		
+		const NewsMain = () =&gt; (
+			&lt;div&gt;
+				&lt;NewsSlider
+					type=&quot;featured&quot;
+					settings=&#123;{dots:false}}
+					start={0}
+					amount={3}
+				/&gt;
+				&lt;NewsList
+				type=&quot;cardMain&quot;
+				loadMore={true}
+				start={3}
+				amount={6}
+				/&gt;
+			&lt;/div&gt;
+		)
+		
+		export default NewsMain;
+		</code>
+		</pre>
+</li>
+
+<li>Inside the <em>src/components/Articles/Videos/Main</em> folder create a file called <em>index.js</em>. Open the file and add the following code:
+	<pre>
+		<code class="language-jsx">
+		import React from 'react';
+		
+		import VideosList from '../../../widgets/VideosList/videosList';
+		
+		const VideosMain = () =&gt; (
+			&lt;VideosList
+			type=&quot;card&quot;
+			title={false}
+			loadmore={true}
+			start={0}
+			amount={8}
+			/&gt;
+		)
+		
+		export default VideosMain;
+		</code>
+	</pre>
+</li>
+
+</ol>
+
+<p>This simple web app displays news and video data from the db.json file pulled in from the JSON server.</p>
+
+<h3>Sources</h3>
+<ul>
+	<li><a href="https://www.udemy.com/the-complete-react-fullstack-course/" target="_blank">The complete react fullstack course (2018)</a> by <a href="https://www.udemy.com/user/codign-revolution/" target="_blank">Coding Revolution</a></li>
+	<li><a href="https://www.lynda.com/React-js-tutorials/React-js-Essential-Training/761961-2.html" target="_blank">React.js Essencial Training 2016</a> with <a href="https://www.lynda.com/Eve-Porcello/1874244-1.html" target="_blank">Eve Porcello</a></li>
+</ul>
+
+
+
+</div><!-- END post-main -->

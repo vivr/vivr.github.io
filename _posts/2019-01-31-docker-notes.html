@@ -1,0 +1,257 @@
+---
+layout: post
+title: "Docker Notes"
+categories: Docker
+featImg: docker.jpg
+itemType: image
+pageType: blog
+---
+<div class="post-main">
+<h3>What is Docker?</h3>
+<p><a href="" target="_blank">Docker</a> is a tool designed to make it easier to create, deploy, and run applications using containers. So for example, we could run things like an nginx or apache server, mysql, Wordpress or Drupal inside of a container. Each container is separate from our operating system but will be the same if we try to run it on a different operating system.</p>
+
+<h3>Project set up</h3>
+<p>This post outlines some basic Docker concepts and describes how I used Docker to set up a Wordpress environment and a Jekyll environment. My operating system is Manjaro Linux 18.0 and I'm using Docker 18.09, Docker Machine 0.16 and Docker Compose 1.23.</p>
+
+<h3>Docker installation and basic commands</h3>
+<ul>
+<li>Install Docker: <code class="language-bash">sudo pacman -S docker</code></li>
+<li>Run docker commands as a non-root user:
+  <pre>
+  <code class="language-bash">
+  getent group docker
+  sudo gpasswd -a yourusername docker
+  newgrp docker
+  </code>
+  </pre>
+</li>
+<li>Connect to the Docker daemon:
+  <pre>
+  <code class="language-bash">
+  systemctl enable docker
+  systemctl start docker
+  </code>
+  </pre>
+</li>
+<li><em>Docker version</em> returns the verion of your client and the daemon: <code class="language-bash">docker version</code></li>
+<li><em>Docker info</em> shows most configuration values for the engine such as the number of containers that are running and the number of images stored in Docker: <code class="language-bash">docker info</code></li>
+<li>Get a list of Docker commands: <code class="language-bash">docker</code></li>
+<li>Stop the Docker daemon: <code class="language-bash">systemctl stop docker.service</code></li>
+<li>Check Docker status: <code class="language-bash">systemctl status docker</code></li>
+<li>Uninstall Docker: <code class="language-bash">sudo pacman -Rns docker</code></li>
+<li>Remove Docker group: <code class="language-bash">sudo groupdel docker</code></li>
+<li>Remove Docker directory: <code class="language-bash">sudo rm -rf /var/lib/docker</code></li>
+</ul>
+
+<h3>Containers</h3>
+<p>A container is an instance of a Docker image which is running as a process. You can have many containers running off the same image.</p>
+
+<ul>
+<li>Run a new container: <code class="language-bash">docker container run -p 80:80 nginx</code> Visit http://localhost and you'll see nginx works. The <code class="language-bash">-p</code> (--publish) part of the command opened port 80 on the host ip.</li>
+<li>Run a new containter in the background: <code class="language-bash">docker container run --p 80:80 -d nginx</code> <code class="language-bash">-d</code> (--detach) means that the terminal does not receive input or display output.</li>
+<li>List running containers: <code class="language-bash">docker container ls</code></li>
+<li>List all containers: <code class="language-bash">docker container ls -a</code></li>
+<li>Stop a container with the shortened ID 3c9: <code class="language-bash">docker container stop 3c9</code> We only need to type the first few digits of the container ID.</li>
+<li>Start an existing container with the shortened ID 3c9: <code class="language-bash">docker container start 3c9</code> Note: <code class="language-bash">docker container run</code> always starts a <em>new</em> container.</li>
+<li>Remove stopped containers: <code class="language-bash">docker container rm 3c9 d72</code> Note: I have a total of 2 containers with the shortened IDs 3c9 and d72.</li>
+<li>Remove running containers: <code class="language-bash">docker container rm -f 3c9</code> Note: this uses the --force command.</li>
+<li>Specify a container name: docker container run --p 80:80 --d --name webhost nginx</li>
+<li>Pausing a container: <code class="language-bash">docker container pause 3c9</code></li>
+</ul>
+
+<h3>Add multiple containers</h3>
+<p>If we allow the host to listen for multiple containers and forward traffic they all need to run on different ports. In this example we are going to add 3 containers - nginx, apache and mysql. The nginx server is going to run on 80:80, the httpd server on 8080:80 and the mysql server on 3306:3306.</p>
+
+<ol>
+<li>Open the terminal and run: <code class="language-bash">docker container run -d --name webhost1 -p 80:80 nginx</code> Visit http://localhost and you'll see nginx works</li>
+<li>For the Apache server run: <code class="language-bash">docker container run -d --name webhost2 -p 8080:80 httpd</code> Visit http://localhost:8080 and you will see Apache works</li>
+<li>For the MySql server run: <code class="language-bash">docker container run -d -p 3306:3306 --name db -e MYSQL_RANDOM_ROOT_PASSWORD=yes mysql</code> Note <code class="language-bash">MYSQL_RANDOM_ROOT_PASSWORD</code> generates a root password. You can view the generated password by typing <code class="language-bash">docker container logs db</code></li>
+<li>Type <code class="language-bash">docker container ls</code> to view running containers. My containers have the following ID's:
+<pre>
+<code class="language-bash">
+5f14a5131c7e
+f83bb3734122
+e2ef09cfe75c 
+</code>
+</pre>
+</li>
+<li>Run <code class="language-bash">docker container stop 5f1 f83 e2e</code> to stop running containers.</li>
+<li>Finally, run <code class="language-bash">docker container rm 5f1 f83 e2e</code> to remove all containers.</li>
+</ol>
+
+<h3>What's happening inside a container?</h3>
+<ul>
+<li>View a single container's process list: <code class="language-bash">docker container top</code></li>
+<li>Details of a single containers configuration: <code class="language-bash">docker container inspect</code></li>
+<li>View all container's stats: <code class="language-bash">docker container stats</code></li>
+</ul>
+
+<h3>Getting a shell inside a container</h3>
+<p>Running a terminal inside a container is useful for changing config files, downloading packages from the internet and doing anything you would normally do inside a shell.</p>
+
+<ul>
+<li>Start a new container: <code class="language-bash">docker container run -it --name containername nginx bash</code> 
+<p><code class="language-bash">-it</code> gives us a terminal inside the running container.</p>
+<p>The default command for an nginx container is to run the nginx program itself. Adding <code class="language-bash">bash</code> at the end of the run command changes the default program to bash which gave us our shell.</p>
+</li>
+<li>To get out of the shell just type <code class="language-bash">exit</code>
+<p>Since we changed the default program from nginx to bash, simply exiting bash stopped the container.</p>
+</li>
+<li>Run additional commands inside existing container: <code class="language-bash">docker container exec -it mysql bash</code>
+<p>This command runs mysql but also allows us to run bash commands inside the container so we can do some administrative tasks. Once we exit bash, mysql is still running.</p>
+</ul>
+
+<h3>Docker networking</h3>
+
+<p>We don't have to use <code class="language-bash">-p</code> when we have specific containers talking to each other inside our host. For example, if we had a mysql server and a php apache container, both containers should be on the same network and able to talk to each other without actually opening their ports up to the rest of the physical network. We could do the same for mongo and nodejs containers so they could talk to each other without using <code class="language-bash">-p</code> to expose them to the network.</p>
+
+<ul>
+<li>Show which port is exposed on a container: <code class="language-bash">docker container port containername</code></li>
+<li>View a container's ip address: <code class="language-bash">{% raw %} docker container inspect --format '{{ .NetworkSettings.IPAddress }}' containername {% endraw %}</code>
+<p>The Docker default ip address is 172.17.0.1 so if we only have 1 container our ip address will be 127.17.0.2</p>
+</li>
+<li>Show networks: <code class="language-bash">docker network ls</code>
+<p>This shows a list with the network names <code class="language-bash">bridge</code>, <code class="language-bash">host</code> and <code class="language-bash">none</code>.</p>
+<ul>
+    <li><code class="language-bash">bridge</code> is the default network that bridges through the NAT firewall to the physical network that your host is connected to.</li>
+    <li><code class="language-bash">host</code> is a special network that skips the virtual networking of Docker and attaches the container directly to the host interface. This can improve the performance of high throughput networking but sacrifices security of the container model.</li>
+    <li>The <code class="language-bash">none</code> network removes eth0 and only leaves you with a localhost interface in the container.</li>
+</ul>
+</li>
+<li>Get the details of a specific network: <code class="language-bash">docker network inspect</code></li>
+<li>Create a network: <code class="language-bash">docker network create my_new_network</code></li>
+<li>Attacha a network to a new container: <code class="language-bash">docker container run -d --name new_nginx --network my_new_network nginx</code></li>
+<li>Connect network to existing container: <code class="language-bash">docker network connect containerid my_new_network</code></li>
+</li>
+</ul>
+
+<h3>DNS</h3>
+<p>Ip addresses can change but container names remain the same. Using ip's for containers to talk to eachother is counterproductive and should be avoided. Docker has a built in DNS server that containers use by default. Docker defaults the hostname to the container's name, but you can also set aliases.</p>
+
+<h3>Docker images</h3>
+<p>An image is the application we want to run. A Docker image is not a complete OS. There's no kernel or kernel drivers, it's really just the binaries that your application needs because your host provides the kernel.</p>
+<p>The image can be a really small single file or a big image that uses a distribution like Ubuntu with it's own package manager built in with Apache and PHP installed.</p>
+<p>We get all of our images from registries. The default registry is Docker Hub.</p>
+
+<ul>
+<li>View image repositories installed on your system: <code class="language-bash">docker image ls</code></li>
+<li>Pull image from Docker Hub: <code class="language-bash">docker pull image_name</code></li>
+<li>Login to Docker Hub: <code class="language-bash">docker login</code></li>
+<li>Logout of Docker Hub: <code class="language-bash">docker logout</code></li>
+<li>Push image to Docker Hub: <code class="language-bash">docker image push user_name/image_name</code></li>
+<li>Add tag to image: <code class="language-bash">docker image tag image_tag_name vivreay/image_name</code></li>
+<li>Remove docker image: <code class="language-bash">docker rmi image_id</code></li>
+</ul>
+
+<h3>Setup Wordpress environment in Docker</h3>
+
+<ol>
+<li>Create a new directory called <em>wordpress_site</em> and open it in your code editor.</li>
+<li>Create a new file called <em>docker-compose.yaml</em>.</li>
+<li>Add the following content to the <em>docker-compose.yaml</em> file:
+<pre>
+<code class="language-yaml">
+    version: '3'
+
+    services:
+      # Database
+      db:
+        image: mysql:5.7
+        volumes:
+          - db_data:/var/lib/mysql
+        restart: always
+        environment:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: wordpress
+          MYSQL_USER: wordpress
+          MYSQL_PASSWORD: wordpress
+        networks:
+          - wpsite
+      # phpmyadmin
+      phpmyadmin:
+        depends_on:
+          - db
+        image: phpmyadmin/phpmyadmin
+        restart: always
+        ports:
+          - '8080:80'
+        environment:
+          PMA_HOST: db
+          MYSQL_ROOT_PASSWORD: password 
+        networks:
+          - wpsite
+      # Wordpress
+      wordpress:
+        depends_on:
+          - db
+        image: wordpress:latest
+        ports:
+          - '8000:80'
+        restart: always
+        volumes: ['./:/var/www/html']
+        environment:
+          WORDPRESS_DB_HOST: db:3306
+          WORDPRESS_DB_USER: wordpress
+          WORDPRESS_DB_PASSWORD: wordpress
+        networks:
+          - wpsite
+    networks:
+      wpsite:
+    volumes:
+      db_data:
+</code>
+</pre>
+</li>
+<li>Open your <em>wordpress_site</em> directory in the terminal and type: <code class="language-bash">docker-compose up -d</code>
+</li>
+<li>In the browser go to http://localhost:8000 and go through the on screen instructions to set up your Wordpress site.</li>
+<li>Next, go to http://localhost:8080 and you'll see the phpmyadmin login page. You can login with username: <em>root</em> and password: <em>password</em>.</li>
+<li>We have 3 containers. My containers have the following id's:
+<pre>
+<code class="language-bash">
+02b55da312db
+c43b8326455e
+fe0167836360 
+</code>
+</pre>
+</li>
+<li>I can stop the containers by typing: <code class="language-bash">docker container stop 02b c43 fe0</code></li>
+<li>To start the containers again I'll type: <code class="language-bash">docker container start 02b c43 fe0</code></li>
+</ol>
+
+<h3>Setup Jekyll environment in Docker</h3>
+
+<ol>
+<li>Create a new directory called <em>jekyll_site</em> and open it in your code editor.</li>
+<li>Create a new file called <em>docker-compose.yaml</em>.</li>
+<li>Add the following content to the <em>docker-compose.yaml</em> file:
+<pre>
+<code class="language-yaml">
+  version: '3'
+
+  services:
+    jekyll:
+      image: jekyll/jekyll:latest
+      command: jekyll serve --watch --force_polling --verbose
+      ports:
+        - 4000:4000
+      volumes:
+        - .:/srv/jekyll
+</code>
+</pre>
+</li>
+<li>Open your jekyll_site directory in the terminal and type: <code class="language-bash">docker-compose run jekyll bash</code></li>
+<li>This opens bash inside our container. Next type: <code class="language-bash">jekyll new . --force</code> then <code class="language-bash">exit</code> to get out of the container.</li>
+<li>Start the Docker container: <code class="language-bash">docker-compose up</code></li>
+<li>In the browser go to http://localhost:4000</li>
+</ol>
+
+<h3>Sources</h3>
+<ul>
+  <li><a href="https://www.youtube.com/watch?v=pYhLEV-sRpY" target="_blank">Quick Wordpress Setup With Docker</a> by <a href="https://www.youtube.com/channel/UC29ju8bIPH5as8OGnQzwJyA" target="_blank">Traversy Media</a></li>
+  <li><a href="https://www.udemy.com/docker-mastery/" target="_blank">Docker Mastery</a> by <a href="https://www.bretfisher.com/" target="_blank">Bret Fisher</a></li>
+  <li><a href="https://matthiaslischka.at/2018/12/22/jekyll-docker-compose/" target="_blank">Jekyll and docker-compose</a> by <a href="https://matthiaslischka.at/" target="_blank">Matthias Lischka</a></li>
+</ul>
+
+
+</div><!-- END post__main -->

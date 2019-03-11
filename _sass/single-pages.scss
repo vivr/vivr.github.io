@@ -1,0 +1,17 @@
+.single-page {
+  display: grid;
+  grid-template-columns: [left-start] 19rem [left-end center-start] minmax(35rem, 65rem) [center-end right-start] 1fr [right-end];
+  grid-gap: $spacing-unit * 4;
+
+  @media only screen and (max-width: $bp-large) {
+    grid-template-columns: [left-start] 19rem [left-end center-start] 1fr [center-end];
+  }
+  @media only screen and (max-width: $bp-medium) {
+    grid-template-columns: [center-start] 1fr [center-end];
+    grid-gap: 0;
+  }
+  
+  &-content {
+    grid-column: center-start / center-end;
+  }
+}

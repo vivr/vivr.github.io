@@ -1,0 +1,96 @@
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0; }
+
+html {
+  font-size: 62.5%; //1 rem = 10px; 10px/16px = 62.5%
+}
+
+body {
+  box-sizing: border-box;
+}
+
+.site {
+  color: $color-white;
+  background-color: $color-black;
+  margin: $spacing-unit * 2;
+  @media only screen and (max-width: $bp-small) {
+    margin: $spacing-unit;
+  }
+}
+
+a {
+  color: $color-white;
+  text-decoration: none;
+}
+a:hover {
+  color: $color-light;
+}
+
+p, ul, ol {
+  font-family: $base-font-family;
+  font-weight: $base-font-weight;
+  font-size: $base-font-size;
+  line-height: $base-line-height;
+}
+
+ol + h3 { margin-top: $spacing-unit / 2  }
+
+h1,
+h2,
+h3,
+label,
+.navigation-list,
+.prevnext-links,
+.date,
+.posts-start-name,
+.button {
+  font-family: $secondary-font-family;
+  font-weight: $secondary-font-weight;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: $base-font-size;
+  font-weight: $secondary-font-weight;
+  letter-spacing: 0.2rem;
+}
+
+h3, h4 {
+  font-size: $base-font-size;
+  margin-bottom: $spacing-unit / 4;
+}
+
+h4 {
+  font-family: $secondary-font-family;
+  font-weight: $secondary-font-weight;
+}
+
+em { 
+  font-weight: $secondary-font-weight;
+  font-style: normal; }
+
+img {
+  display: block;
+  border: 0;
+  width: 100%;
+  height: auto;
+}
+
+.icon {
+  fill: $color-white;
+}
+.icon:hover, 
+.icon:hover svg path {
+  fill: $color-light;
+  color: $color-light;
+}
+
+.date {
+  font-weight: $base-font-weight;
+  font-size: $small-font-size;
+  letter-spacing: 0.2rem;
+}

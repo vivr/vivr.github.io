@@ -1,0 +1,12 @@
+	{% include head.html %}
+<body class="site">
+<a href="#content" class="skip-link screen-reader-text">Skip to content</a>
+	<div class="container">
+		{% include header.html %}
+		<main id="content" class="content">
+      {{ content }}
+    </main>
+		{% include js-link.html %}
+	</div><!-- END container -->
+</body>
+</html>
